@@ -1,1 +1,2 @@
-# intro2im
+# Introduction to Interactive Media
+## Joseph's Repository
