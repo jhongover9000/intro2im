@@ -1,10 +1,14 @@
 //Intro to IM Assignment 1: Portrait
-//Joseph Hong
+//By Joseph Hong
+//Description: Created a simple portrait with the shape functions in Processing. Not
+//             exactly realistic and far from interactive, but this is a review of the shapes we learned
+//             about in class.
 //==================================================================================================================================
+//Initialization
 
-
-//initial size
+//Screen Size & Background Color
 size(200,200);
+background(255);
 
 color hairIrisColor = color(0,0,0);  //color for both hair and irises (yes they're black)
 color skinColor = color(255,229,180);  //color for skin
@@ -12,6 +16,9 @@ color eyeBallColor = color(255,255,255);  //color for eyeballs
 
 //No outlines (makes the image feel smoother)
 noStroke();
+
+//==================================================================================================================================
+//Portrait Creation
 
 //Hair (Back)
 fill(hairIrisColor);
