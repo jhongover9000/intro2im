@@ -1,7 +1,7 @@
 ##Assignment 2: Repetitive Art
 
-![what we see](IM_Assignment2_Screenshot_PhaseOne)
-![what is](IM_Assignment2_Screenshot_PhaseTwo)
+![what we see](IM_Assignment2_Screenshot_PhaseOne.png)
+![what is](IM_Assignment2_Screenshot_PhaseTwo.png)
 
 This initially started as me trying to make what Casey Reas showed in his lecture, but I realized that I didn't actually
 have that kind of skill so I ended up changing a few things here and there and made it a bit more interactive and different.
