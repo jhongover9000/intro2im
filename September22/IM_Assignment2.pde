@@ -1,4 +1,4 @@
-//Introduction to Interactive Media Assignment 2: Repeating Art
+//Introduction to Interactive Media Assignment 2: Repetitive Art
 //Joseph Hong
 //Description: This is a (somewhat interactive) piece of digital art that represents "chance". The initial phase is made
 //             up of lines that appear on the screen only when the circles, hidden from sight, come into contact with one
@@ -135,9 +135,9 @@ void setup() {
 void draw() {
   if (frameCount < 10000) {                    //just to make it stop at some point in time, because I realized this program kinda kills your battery
     if (frameCount%1000 < 500) {               //color changes into different shades of gray every 500 frames
-      list.lineColor = random(200, 250);
+      list.lineColor = random(190, 240);
     } else {
-      list.lineColor = random(0, 50);
+      list.lineColor = random(10, 60);
     }
     list.updateAndDisplay();                  //calls the function of the ObjectList, updating and displaying the screen
   }
