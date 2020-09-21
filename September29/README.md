@@ -18,3 +18,5 @@ While working on this project, I kinda had one of those revalations that people 
 it here. The first phase (initial) shows the surface level connections that we make in life, or maybe the decisions that we believe set
 our lives in a different direction. The second phase (after a click) shows the all of the connections that go unnoticed, those
 moments that we didn't (and probably will never) realize had an affect on who we are today. It's just some food for thought :)
+
+![](https://github.com/jhongover9000/intro2im/blob/master/September29/Assignment3.mp4?raw=true)
