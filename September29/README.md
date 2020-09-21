@@ -1,5 +1,8 @@
 ## Assignment 3: Object-Oriented Artwork
 
+![Phase 1. What We See](IM_Assignment2_Screenshot_PhaseOne.png)
+!(Phase 2. What We Don't](IM_Assignment2_Screenshot_PhaseTwo.png)
+
 This piece was inspired by what Casey Reas showed in his lecture when he was trying to depict the beauty of randomization.
 I realized that I didn't have the skill that he had when he wrote programs that created these epic designs, so I ended making
 something that was a little bit more suitable to my skills.
