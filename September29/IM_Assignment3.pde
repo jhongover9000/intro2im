@@ -19,14 +19,14 @@ int screenWidth = 500;              //width and height of screen (can be control
 int screenHeight = 500;             //later on in the setup function)
 int circleCount = 100;               //number of circles used in the program
 float circleSize = 20;              //size of circles (radius)
-String lineAppearance = "equal";    //or "lessOrEqual"; decides when the line will appear (when circles touch, only once vs constantly)
+String lineAppearance = "equal";    //or "lessOrEqual"; determines condition for lines appearance (when circles touch, only once vs constantly)
 
 
 //======================================================================================================================================================
 //======================================================================================================================================================
 //Class Definition
 
-//circle class
+//circle class (position, speed, and size)
 class Circle {
   float locX;
   float locY;
@@ -67,7 +67,7 @@ class ObjectList {
   ArrayList<Circle> circles = new ArrayList<Circle>();
   float lineColor;
 
-  //constructor
+  //constructor (adds 50 circles of random speeds and coordinates to an array)
   ObjectList() {
     for (int i = 0; i<50; i++) {
       Circle circle = new Circle(random(0, screenWidth), random(0, screenHeight), random(-5, 5), random(-5, 5), circleSize);
@@ -104,7 +104,7 @@ class ObjectList {
       }
     }
 
-    ////display circles (for testing purposes)
+    //display circles (for testing purposes)
     //void display() {
     //  for (Circle i : list.getCircles()) {
     //    i.display();
@@ -143,7 +143,7 @@ void draw() {
   }
 }
 
-void mouseClicked() {
+void mouseClicked() {        //resets the background and changes the phase of the piece
   background(0);
   if (lineAppearance == "equal") {
     lineAppearance = "lessOrEqual";
