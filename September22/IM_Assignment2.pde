@@ -1,12 +1,11 @@
 //Introduction to Interactive Media Assignment 2: Repeating Art
 //Joseph Hong
 //Description: This is a dynamic piece of art that uses randomization to constantly dish out
-//             new pieces of "art" every 10 frames.
+//             new pieces of "art" every 10 frames. You can stop the frame by clicking your mouse.
 //======================================================================================================================================================
 //======================================================================================================================================================
 //Global Variables
 String status = "going";      //or "stopped"; this decides whether the art will be frozen or constantly changing
-
 
 
 //======================================================================================================================================================
