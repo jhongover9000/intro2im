@@ -30,15 +30,14 @@ awarded points.
 I guess something that I thought was interesting was how I made the game relative to the number of rows at the start, 
 meaning that orbs will be placed in rows according to the value you assign at the beginning. This was done through coding:
 
-while (tempY <= orbSize + (startRowNum-1)*orbSize*2) {
-
-      Orb tempObj = new Orb(tempX, tempY, 0, 0, colors[rand.nextInt(3)]);
-      orbList.add(tempObj);
-      tempX += (orbSize*2);
-      if (tempX + orbSize > screenWidth) {
-        tempX = orbSize;
-        tempY += (orbSize*2);
+      while (tempY <= orbSize + (startRowNum-1)*orbSize*2) {
+            Orb tempObj = new Orb(tempX, tempY, 0, 0, colors[rand.nextInt(3)]);
+            orbList.add(tempObj);
+            tempX += (orbSize*2);
+            if (tempX + orbSize > screenWidth) {
+              tempX = orbSize;
+              tempY += (orbSize*2);
       }
       
-This basically configures the orbs so that they'll fill the entire row, then move onto the next, continuously until the number
-of wanted rows are created.
+This basically configures the orbs so that they'll fill the entire row, then move onto the next, continuously until the 
+number of wanted rows are created. I thought it was interesting because it was relative & dynamic :)
