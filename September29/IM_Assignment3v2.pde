@@ -72,9 +72,15 @@ class Orb {
   void display() {
     //if not popped, display orb with color
     if (!hidden) {
-      stroke(100);
+      stroke(50);
       fill(c);
       ellipse(x, y, 2*radius, 2*radius);
+      stroke(255);
+      strokeWeight(3);
+      noFill();
+      arc(x, y, 1.5*radius, 1.5*radius, PI + radians(10), PI + QUARTER_PI + radians(10));
+      arc(x, y, 1.5*radius, 1.5*radius, PI - radians(15), PI - radians(10));      
+      strokeWeight(1);
     }
   }
 }
@@ -288,8 +294,3 @@ void mouseClicked() {
     game.bottomField.c = colors[rand.nextInt(3)];
   }
 }
-
-
-
-
-
