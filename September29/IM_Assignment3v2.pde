@@ -249,10 +249,6 @@ void draw() {
   if(!game.finished){
     background(255);
     game.update();
-    print(game.points);
-    print("\n");
-    print(game.topField.getList().size());
-    print("\n");
     game.display();
     fill(0);
     textSize(10);
@@ -292,3 +288,6 @@ void mouseClicked() {
     game.bottomField.c = colors[rand.nextInt(3)];
   }
 }
+
+
+
