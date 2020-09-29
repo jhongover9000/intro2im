@@ -1,6 +1,7 @@
 ## Assignment 3: Object-Oriented Game
 
 ![](IM_Assignment3_Screenshot.png)
+
 (Game Screenshot)
 
 This is a game that's similar to a "bubble shooter game" (I didn't actually know what it was called until I searched it up).
@@ -9,6 +10,7 @@ also bounce the orb off of the boundaries to get the tricky ones (I can't do it 
 orb, if the adjacent (above, left, right) orbs are the same color, they will also pop. Each popped orb will give you a point, and when you pop all of the orbs, you win!
 
 ![](bubble_shooter_example.jpg)
+
 (Bubble Shooter Example)
 
 This came to mind at some point (I don't really know why or where it came from) and I was like, "huh, let's give it a shot".
