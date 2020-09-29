@@ -14,10 +14,10 @@ import java.util.Random;       //for selecting a random integer (as opposed to a
 //Global Variables
 
 //screen dimensions (need to change on the setup function if you change these; they're only for the class creation)
-int screenWidth = 300;
-int screenHeight = 300;
+int screenWidth = 500;
+int screenHeight = 500;
 
-int orbSize = 15;      //size of orbs
+int orbSize = 25;      //size of orbs
 int startRowNum = 3;    //number of rows of orbs at the start
 
 color[] colors = {color(255, 200, 200), color(200, 255, 200), color(200, 200, 255)};  //set of colors to choose from (for orbs)
@@ -234,7 +234,7 @@ Game game = new Game();
 
 //Setup
 void setup() {
-  size(300, 300);
+  size(500, 500);
   frameRate(20);
 }
 
@@ -288,6 +288,8 @@ void mouseClicked() {
     game.bottomField.c = colors[rand.nextInt(3)];
   }
 }
+
+
 
 
 
