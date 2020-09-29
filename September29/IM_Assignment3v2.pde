@@ -44,7 +44,7 @@ class Orb {
   boolean hidden = false;
   boolean moving = false;
 
-  
+
   //Constructor
   Orb(int x, int y, int vx, int vy, color c) {
     this.x = x;
@@ -90,12 +90,12 @@ class Orb {
 class StillOrbs {
   //array of orbs at the top of screen
   ArrayList<Orb> orbList = new ArrayList<Orb>();
-  
+
   //Constructor
   StillOrbs() {
     int tempX = orbSize;
     int tempY = orbSize;
-    
+
     //places orbs in rows relative to screen width, uses the startRowNum to determine how many rows of orbs to put
     while (tempY <= orbSize + (startRowNum-1)*orbSize*2) {
       Orb tempObj = new Orb(tempX, tempY, 0, 0, colors[rand.nextInt(3)]);
@@ -107,7 +107,7 @@ class StillOrbs {
       }
     }
   }
-  
+
   //Getter
   ArrayList<Orb> getList() {
     return orbList;
@@ -116,8 +116,8 @@ class StillOrbs {
   //Empty update function (for the sake of simplifying coding for the Game object)
   void update() {
   }
-  
-  
+
+
   //Display each orb in the array
   void display() {
     for (Orb i : orbList) {
@@ -132,101 +132,107 @@ class Game {
   StillOrbs topField = new StillOrbs();  //array of orbs
   Orb bottomField = new Orb(screenWidth/2, screenHeight-orbSize, 0, 0, colors[rand.nextInt(3)]);  //starting orb (shooting one)
   int points = 0;    //point counter
+  int turns = 0;
   boolean finished = false;    //determine whether game is in play or not
+  boolean win = false;         //determine if player won 
 
   //Update (this part is the complicated part)
   void update() {
     //iterates through the orbs at the top and checks if the player's orb has hit them and pops according to conditions & gives points
     for (int i = 0; i < topField.getList().size(); i++) {
       //if the colors don't match and an orb is hit (calculated through Pythagorean Theorem), no orbs are popped and the player's orb resets
-      if ((int(topField.getList().get(i).x - bottomField.x)*int(topField.getList().get(i).x - bottomField.x) + int(topField.getList().get(i).y - bottomField.y)* int(topField.getList().get(i).y - bottomField.y) <= 4*orbSize*orbSize ) && (!topField.getList().get(i).hidden) && topField.getList().get(i).c != bottomField.c) {
-        bottomField.moving = false;
-        bottomField.vx = bottomField.vy = 0;
-        bottomField.x = screenWidth/2;
-        bottomField.y = screenHeight-orbSize;
-        bottomField.c = colors[rand.nextInt(3)];
-      } 
+      if ((int(topField.getList().get(i).x - bottomField.x)*int(topField.getList().get(i).x - bottomField.x)
+        + int(topField.getList().get(i).y - bottomField.y)* int(topField.getList().get(i).y - bottomField.y) <= 4*orbSize*orbSize )
+        && (!topField.getList().get(i).hidden) && topField.getList().get(i).c != bottomField.c) {
+        resetOrb();
+      }
       //if the colors match and the player's orb hits a passive orb (calculated through Pythagorean Theorem), then the conditions are looked through while the player's orb is reset
-      else if ((int(topField.getList().get(i).x - bottomField.x)*int(topField.getList().get(i).x - bottomField.x) + int(topField.getList().get(i).y - bottomField.y)* int(topField.getList().get(i).y - bottomField.y) <= 4*orbSize*orbSize ) && (!topField.getList().get(i).hidden) && (topField.getList().get(i).c == bottomField.c)) {
-        bottomField.moving = false;
-        bottomField.vx = bottomField.vy = 0;
-        bottomField.x = screenWidth/2;
-        bottomField.y = screenHeight-orbSize;
-        bottomField.c = colors[rand.nextInt(3)];
-        
+      else if ((int(topField.getList().get(i).x - bottomField.x)*int(topField.getList().get(i).x - bottomField.x)
+        + int(topField.getList().get(i).y - bottomField.y)* int(topField.getList().get(i).y - bottomField.y) <= 4*orbSize*orbSize )
+        && (!topField.getList().get(i).hidden) && (topField.getList().get(i).c == bottomField.c)) {
+        resetOrb();
+
         //condition 1: if the passive orb that got hit is in the middle (not the two sides of the screen), it is popped and the adjacent
         //orbs are checked (whether they have the same color). If they meet those conditions, and are not yet popped, then they are
         //hidden and points are rewarded to the player for each orb that is popped (hidden).
         if (topField.getList().get(i).x > orbSize && topField.getList().get(i).x < screenWidth - orbSize) {
           topField.getList().get(i).hidden = true;
           points++;
-          if (topField.getList().get(i-1).c == topField.getList().get(i).c && !topField.getList().get(i-1).hidden) {
-            topField.getList().get(i-1).hidden = true;
-            points++;
-          }
-          if (topField.getList().get(i+1).c == topField.getList().get(i).c && !topField.getList().get(i+1).hidden) {
-            topField.getList().get(i+1).hidden = true;
-            points++;
-          }
-          if (topField.getList().get(i).y > orbSize) {  //this is to check if there's a row above (for adjacent top orb)
-            if (topField.getList().get(i-screenWidth/(orbSize*2)).c == topField.getList().get(i).c && !topField.getList().get(i-screenWidth/(orbSize*2)).hidden) {
-              topField.getList().get(i-screenWidth/(orbSize*2)).hidden = true;
-              points++;
-            }
-          }
-        } 
-        
+          checkLeft(i);
+          checkRight(i);
+          checkAbove(i);
+        }
+
         //condition 2: if the passive orb that got hit is located on the far left of the screen, then only the adjacent top and right
         //orbs are checked (since the left is not actually the left, as all the orbs are in a list)
         else if (topField.getList().get(i).x == orbSize) {
           topField.getList().get(i).hidden = true;
           points++;
-          if (topField.getList().get(i+1).c == topField.getList().get(i).c && !topField.getList().get(i+1).hidden) {
-            topField.getList().get(i+1).hidden = true;
-            points++;
-          }
-          if (topField.getList().get(i).y > orbSize) {
-            if (topField.getList().get(i-screenWidth/(orbSize*2)).c == topField.getList().get(i).c && !topField.getList().get(i-screenWidth/(orbSize*2)).hidden) {
-              topField.getList().get(i-screenWidth/(orbSize*2)).hidden = true;
-              points++;
-            }
-          }
-        } 
-        
+          checkRight(i);
+          checkAbove(i);
+        }
+
         //condition 3: if the passive orb that got hit is located on the far right of the screen, then only the adjacent top and left
         //orbs are checked (since the right is not actually the right, as all the orbs are in a list)
         else if (topField.getList().get(i).x == screenWidth - orbSize) {
           topField.getList().get(i).hidden = true;
           points++;
-          if (topField.getList().get(i-1).c == topField.getList().get(i).c && !topField.getList().get(i-1).hidden) {
-            topField.getList().get(i-1).hidden = true;
-            points++;
-          }
-          if (topField.getList().get(i).y > orbSize) {
-            if (topField.getList().get(i-screenWidth/(orbSize*2)).c == topField.getList().get(i).c && !topField.getList().get(i-screenWidth/(orbSize*2)).hidden) {
-              topField.getList().get(i-screenWidth/(orbSize*2)).hidden = true;
-              points++;
-            }
-          }
+          checkLeft(i);
+          checkAbove(i);
         }
       }
-
     }
-    
-    //end game if all orbs are hidden
-    if (points == topField.getList().size()) {    
+
+    //end game if all 20 turns are used or if all orbs have been popped
+    if (turns == 20 || points == game.topField.getList().size()) {    
       finished = true;
     }
-    
+
     //update both objects in class
     topField.update();
     bottomField.update();
   }
-  
+
+
   //Display
   void display() {
     topField.display();
     bottomField.display();
+  }
+
+  //Check orb above
+  void checkAbove(int i) {
+    if (topField.getList().get(i).y > orbSize) {
+      if (topField.getList().get(i-screenWidth/(orbSize*2)).c == topField.getList().get(i).c && !topField.getList().get(i-screenWidth/(orbSize*2)).hidden) {
+        topField.getList().get(i-screenWidth/(orbSize*2)).hidden = true;
+        points++;
+      }
+    }
+  }
+  
+  //Check orb to right
+  void checkRight(int i) {
+    if (topField.getList().get(i+1).c == topField.getList().get(i).c && !topField.getList().get(i+1).hidden) {
+      topField.getList().get(i+1).hidden = true;
+      points++;
+    }
+  }
+
+  //Check orb to left
+  void checkLeft(int i) {
+    if (topField.getList().get(i-1).c == topField.getList().get(i).c && !topField.getList().get(i-1).hidden) {
+      topField.getList().get(i-1).hidden = true;
+      points++;
+    }
+  }
+
+  //Reset the player's orb location & velocity to original position
+  void resetOrb() {
+    bottomField.moving = false;
+    bottomField.vx = bottomField.vy = 0;
+    bottomField.x = screenWidth/2;
+    bottomField.y = screenHeight-orbSize;
+    bottomField.c = colors[rand.nextInt(3)];
   }
 }
 
@@ -252,22 +258,23 @@ void setup() {
 //Draw
 void draw() {
   //While the game is not finished, the program will continue to update and display the game
-  if(!game.finished){
+  if (!game.finished) {
     background(255);
     game.update();
     game.display();
     fill(0);
     textSize(10);
     textAlign(LEFT);
-    text("Points:" + String.valueOf(game.points), orbSize, screenHeight - orbSize);
+    text("Points: " + String.valueOf(game.points) + "\nTurns Left: " + String.valueOf(20 - game.turns), orbSize, screenHeight - orbSize);
   }
   //if the game ended, then the game will display that the player has won.
-  else{
+  else {
     background(255);
     stroke(0);
     textSize(40);
     textAlign(CENTER);
-    text("You Win!\n" + "Score: " + String.valueOf(game.points), screenWidth/2, screenHeight/2 - orbSize);
+    if(game.points == game.topField.getList().size()){text("You Win!\n" + "Score: " + String.valueOf(game.points), screenWidth/2, screenHeight/2 - orbSize);}
+    else{text("Game Over!\n" + "Score: " + String.valueOf(game.points), screenWidth/2, screenHeight/2 - orbSize);}
   }
 }
 
@@ -284,13 +291,10 @@ void mouseClicked() {
       game.bottomField.vx = 0;
     }
     game.bottomField.vy = (int)map(mouseY, screenHeight, screenHeight/2, 0, -10);
+    game.turns++;
   }
   //When the orb is moving (and you know it's not gonna be a good hit), you can reset the orb by clicking it again.
-  else{
-    game.bottomField.moving = false;
-    game.bottomField.vx = game.bottomField.vy = 0;
-    game.bottomField.x = screenWidth/2;
-    game.bottomField.y = screenHeight-orbSize;
-    game.bottomField.c = colors[rand.nextInt(3)];
+  else {
+    game.resetOrb();
   }
 }
