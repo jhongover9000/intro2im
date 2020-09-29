@@ -31,6 +31,7 @@ I guess something that I thought was interesting was how I made the game relativ
 meaning that orbs will be placed in rows according to the value you assign at the beginning. This was done through coding:
 
 while (tempY <= orbSize + (startRowNum-1)*orbSize*2) {
+
       Orb tempObj = new Orb(tempX, tempY, 0, 0, colors[rand.nextInt(3)]);
       orbList.add(tempObj);
       tempX += (orbSize*2);
