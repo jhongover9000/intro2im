@@ -51,3 +51,6 @@ meaning that orbs will be placed in rows according to the value you assign at th
       
 This basically configures the orbs so that they'll fill the entire row, then move onto the next, continuously until the 
 number of wanted rows are created. I thought it was interesting because it was relative & dynamic :)
+
+
+[Here's a link to a quick demonstration!](https://drive.google.com/file/d/1pTbMWsVMgpecbgz3sySAf8Pt8X2mWkff/view?usp=sharing)
