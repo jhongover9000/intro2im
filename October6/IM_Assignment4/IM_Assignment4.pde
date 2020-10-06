@@ -301,24 +301,24 @@ class ObjectList {
     //decides which format is used via the modulus (sometimes none are used, depending on the diceRoll result)
     //the line and array are reset before each format is used to make a line
     if (frameCount%250 == 0) {
-      int diceRoll = rand.nextInt(100);
-      if (diceRoll%3 == 0) {
+      int diceRoll = rand.nextInt(5);
+      if (diceRoll == 0) {
         reset();
         sentenceF1();
         makeSentence();
-      } else if (diceRoll%8 == 0) {
+      } else if (diceRoll == 1) {
         reset();
         sentenceF2();
         makeSentence();
-      } else if (diceRoll%5 == 0) {
+      } else if (diceRoll == 2) {
         reset();
         sentenceF3();
         makeSentence();
-      } else if (diceRoll%7 == 0) {
+      } else if (diceRoll == 3) {
         reset();
         sentenceF4();
         makeSentence();
-      } else if (diceRoll%2 == 0) {
+      } else if (diceRoll == 4) {
         reset();
         sentenceF5();
         makeSentence();
