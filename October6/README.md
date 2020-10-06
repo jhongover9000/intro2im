@@ -17,8 +17,9 @@ To be honest, I didn't want to do this. I wanted to do something that I knew I c
 MadLib. This was mostly because I didn't want to do all of the hardcoding bits of each sentence structure and had no idea 
 where to start with something like this. I looked through the internet and found stuff like Natural Language Processing that
 further discouraged me. But after a bit I thought that I might as well do the hardcoding because I wanted to make a poem
-generator at some point anyways. Some examples are on https://www.poem-generator.org.uk/. I couldn't do it as well as they
-did, but it was something similar.
+generator at some point anyways. Some examples are on https://www.poem-generator.org.uk/. I didn't choose to make an entire
+poem, since I'm not at the point where I can attempt that, but I *did* make a pretty cool sentence generator, which could
+technically be used as a poem generator..? 
 
 ![](PoemGenerator_Screenshot.png)
 
