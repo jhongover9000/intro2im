@@ -1,6 +1,6 @@
 ### Assignment 4: Generative Text
 
-![](IM_Assignent4_Screenshot)
+![](IM_Assignent4_Screenshot.png)
 
 This is a random text generator that uses grammar rules (sentence structure) in order to create one-line poetic sentences.
 This is done using functions that call one another according to the grammar rules (i.e. a noun should come after
@@ -51,3 +51,9 @@ addNoun function returned a non-function command allowed me to shorten each func
 All I needed to do was specify the number of words in the sentence (lineLength) and the number of adjectives (which are optional) at the beginning of each call, which cut down the whole complicated process of adding probability bits over and
 over again. I actually think it's rather ingenius that I came up with this method (no bragging, just really think that
 it's cool).
+
+Something difficult that I ran across was when I would occasionally run into situations where the program would get stuck
+in a loop and constantly call functions without ending, which is why I had to modify the addNoun() function so that in 
+the case that the number of words was over, it would automatically end the line and put a period. Also, getting the whole
+optional bit (articles and adjectives) to work via the grammar rules was kind of complicated as well, but I got through it
+with grit and determination ;)
