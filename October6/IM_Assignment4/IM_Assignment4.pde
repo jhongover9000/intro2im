@@ -1,6 +1,6 @@
-//Intro to IM Assignment 4: Generative Text
+//Intro to IM Assignment 4: Generative Text (Due Oct. 6)
 //Joseph Hong
-//Description: This program uses generative text with a simple (somewhat recursive) call, using the number of words and adjectives
+//Description: This program uses generative text with a simple (somewhat recursive) set of functions, using the number of words and adjectives
 //             as limiters. The program reads from a CSV file and uses the words with random selection (following a grammar
 //             structure placed in each types function) in order to create 5 different formats of lines for the poem. It 
 //             displays one line at a time, and there are also some particle effects (snow) to set the mood :)
