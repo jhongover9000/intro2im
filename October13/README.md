@@ -8,7 +8,9 @@ Honestly, I have no idea. I have no idea why this idea came upon me, or why I th
 
 #### The Design (and Problems)
 
-Like I said beforehand, I'm not really sure what came upon me. I think it was because I saw the whole image maniuplation thing and wondered, "Is that what it's like to be high?" Anyway, I basically took a nice, calm image and tried to make it start flashing colors, then change tints (by adding values to the pixels), then have random objects floating around the screen. I planned on only having the pug at first, but I added some more because it felt empty.
+Like I said beforehand, I'm not really sure what came upon me. I think it was because I saw the whole image maniuplation tutorial and wondered for a moment, "Is that what it's like to be high?" 
+
+Anyway, I basically took a nice, calm image and "high"-ed it. I tried to make it flash colors, change tints (by adding values to the pixels), and have random objects floating and spinning around the screen. I planned on only having the pug at first, but I added some more because it felt empty.
 
 One challenge that I ran across (among the many) was trying to manipulate the image in multiple ways at once. I would try to call the image and change it in multiple functions, but it wouldn't work out properly. I realized what the issue was, but only after I finished writing all of the code. Here's an excerpt:
 
