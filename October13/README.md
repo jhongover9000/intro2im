@@ -47,4 +47,4 @@ Other than that, there weren't that many problems. I didn't get to make the prog
 
 #### I'm sorry.
 
-I have no idea why I got this idea, and the simplicity of the problems I had (and couldn't solve) is rather embarrassing. The program works, but it doesn't have the same kind of polish that I like to have on my projects because I have no real experience in image manipulation (so I didn't know what I was doing... but still).
+I have no idea why I got this idea, and the simplicity of the problems I had (and couldn't solve) is rather embarrassing. The program works, but it doesn't have the same kind of polish that I like to have on my projects because I don't have much experience in image manipulation (so I didn't know what I was doing... but still).
