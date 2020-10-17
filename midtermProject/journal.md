@@ -10,7 +10,7 @@ sure how I'll pull it off, which is why it's still more of a concept than anythi
 One big problem that I foresee is not having enough time to get everything done to the point where I'm satisfied with it.
 I have grand plans, but chances are my lack of experience and time will keep me from carrying them all out...
 
-##### Oct. 13
+#### Oct. 13
 
 So... The problems are already here. Started very basic by formatting the file I'm using. Wrote down in pseudocode how I'm thinking of structuring the code,
 and started seting up the functions for image loading. Aaaand I came across a problem. So, I don't really know how to access
@@ -23,7 +23,7 @@ I think I'll just start coding everything else for now.
 
 
 
-##### Oct. 14
+#### Oct. 14
 
 Yeah, no, I'm not doing great right now. Kind of frustrated. I'm the type that doesn't like leaving a problem be, so I've
 been trying to solve this problem for the past I-don't-know-how-long. So the problem right now is that the command 
@@ -39,7 +39,7 @@ Besides that, I've created classes for the entities that will be in the game (er
 by making the player a subclass of the entities class, and the enemy a subclass of the player. I'm thinking of using functions
 to make the enemies do things by setting values of movement booleans to certain values (not there yet, though).
 
-##### Oct. 15
+#### Oct. 15
 
 At this point I'm thinking that it's just a problem with Processing. Literally everything that I've looked up is telling me
 that using System.getProperty("user.dir") *should return the right directory* but it's not working, instead giving me the
@@ -53,7 +53,7 @@ statuses. More on this later, once I cool down.
 
 
 
-##### Oct. 16
+#### Oct. 16
 
 Right now, I have a choice to make. The images that I have already have their respective identifiers (characterName + moveNumber + "_" + moveNumberFrame).
 I can change this, or adapt the program to call the images in this format. I started with the former, but I might just choose
