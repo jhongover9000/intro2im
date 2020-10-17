@@ -61,8 +61,7 @@ spent nearly eight hours combined trying to make this work by researching and te
 It's not working, so right now I might just place all of the images in the same folder as the Processing file and just load
 the images from there. Screw organization!
 
-###### I also have worked on trying to come up with a system of boolean values in order to determine the player's actions and
-statuses. More on this later, once I cool down.
+###### I also have worked on trying to come up with a system of boolean values in order to determine the player's actions and statuses. More on this later, once I cool down.
 
 
 
