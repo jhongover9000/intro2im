@@ -10,6 +10,10 @@ sure how I'll pull it off, which is why it's still more of a concept than anythi
 One big problem that I foresee is not having enough time to get everything done to the point where I'm satisfied with it.
 I have grand plans, but chances are my lack of experience and time will keep me from carrying them all out...
 
+[October 13](journal.md#Oct. 13)
+
+
+
 #### Oct. 13
 
 So... The problems are already here. Started very basic by formatting the file I'm using. Wrote down in pseudocode how I'm thinking of structuring the code,
@@ -90,7 +94,7 @@ was. Anyway, this limits the character to the specified movesets for that positi
 idea if it'll actually *work*, since I haven't planned out all of the conditions and especially the update() function for the
 player.
 
-##### Oct. 17
+#### Oct. 17
 
 Ok so tbh I've kinda given up on trying to get the current working directory to work... I'm just gonna shove 500+ images in the
 same folder as the program. Fun times! I think I'll upload the program first, but the images will come later since I have to
