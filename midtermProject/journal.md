@@ -15,7 +15,9 @@ I have grand plans, but chances are my lack of experience and time will keep me 
 So... The problems are already here. Started very basic by formatting the file I'm using. Wrote down in pseudocode how I'm thinking of structuring the code,
 and started seting up the functions for image loading. Aaaand I came across a problem. So, I don't really know how to access
 the current working directory on Java. Like, I've scoured the internet and the solution is apparently using the command
+
     String cmd = System.getProperty("user.dir");
+
 but the problem is that *it doesn't work*. I don't know if it's a Processing thing, but it's really getting on my nerves.
 I think I'll just start coding everything else for now.
 
