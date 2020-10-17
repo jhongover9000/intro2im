@@ -107,5 +107,6 @@ player.
 Ok so tbh I've kinda given up on trying to get the current working directory to work... I'm just gonna shove 500+ images in the
 same folder as the program. Fun times! I think I'll upload the program first, but the images will come later since I have to
 rename them and check if this thing will work (I still don't have a working portion for the player movements). *Yay*. But that's
-what I'm planning on doing. Once I get myself two nice ribeye steaks.
+what I'm planning on doing. Once I get myself two nice rib eye steaks.
 
+Update: they were out of rib eyes so I had to settle with sirloins. They weren't bad, but they weren't as good as the rib eyes...
