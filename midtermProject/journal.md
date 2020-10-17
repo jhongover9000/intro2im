@@ -10,8 +10,13 @@ sure how I'll pull it off, which is why it's still more of a concept than anythi
 One big problem that I foresee is not having enough time to get everything done to the point where I'm satisfied with it.
 I have grand plans, but chances are my lack of experience and time will keep me from carrying them all out...
 
-[October 13](journal.md#oct-13)
+#### Days
 
+[October 13](journal.md#oct-13)
+[October 14](journal.md#oct-14)
+[October 15](journal.md#oct-15)
+[October 16](journal.md#oct-16)
+[October 17](journal.md#oct-17)
 
 
 #### Oct. 13
