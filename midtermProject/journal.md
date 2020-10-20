@@ -110,3 +110,93 @@ rename them and check if this thing will work (I still don't have a working port
 what I'm planning on doing. Once I get myself two nice rib eye steaks.
 
 Update: they were out of rib eyes so I had to settle with sirloins. They weren't bad, but they weren't as good as the rib eyes...
+
+#### Oct. 18
+
+Didn't write the journal, but worked on the code for the player movements using the action booleans. Tried to make it so that it'd be a bit more efficient by using else-ifs rather than all ifs. The main reason why I'm using boolean variables instead of strings is for efficiency as well, so that the program doesn't have to read each string and compare them, instead just checking if the value is a 0 or 1 (true or false).
+
+The player's update functions is largely split into whether or not the player has been hit by an object. This is so that being hit will override any movements the player is making and send them into the hit animation for 20-30 counts.
+
+#### Oct. 19
+
+I actually started to touch up on the animation sequences (in other words I loaded the files and made the program run). Yay! The all-images-in-the-same-file thing will probably work, and this will include the sound files as well (it's gonna be a pain organizing them). So far, the player can jump and walk and guard. Obviously I'm going to add more actions (as seen by the player's animation sequence tuples in the class data members), but this was just to check if everything is working right.
+
+Everything is *not* working right, as is to be expected. Problems range from the character shooting into the sky to gliding across the screen while being "still". The problem, from what I can tell, is in the UpdateLastAction() function.
+
+      void updateLastAction() {
+    //Update true position booleans
+    if (isStanding) {
+      wasStanding = true;
+    } else {
+      wasStanding = false;
+    }
+    if (isCrouching) {
+      wasCrouching = true;
+    } else {
+      wasCrouching = false;
+    }
+    if (isJumping) {
+      wasJumping = true;
+    } else {
+      wasJumping = false;
+    }
+    //Update true action booleans
+    if (isAttacking) {
+      wasAttacking = true;
+    } else {
+      wasAttacking = false;
+    }
+    if (isGuarding) {
+      wasGuarding = true;
+    } else {
+      wasGuarding = false;
+    }
+    if (isWalking) {
+      wasWalking = true;
+    } else {
+      wasWalking = false;
+    }
+    }
+
+This is the update function. I'm not really sure why it isn't working, so I ended up making a function called moveSetComplete() which returns true when all the frames of an animation sequence have been iterated through. This function will be used for attacking and jumping, which are the two that are giving me or will probably be giving me the most issues with shifting to the next sequence. This will also be useful for displaying the character being hit (at least when they're standing or crouching; when jumping, the player will need to hit the ground first). Here's the jump function, which has been causing me problems for the past few hours.
+
+      //Jumping
+      if (isJumping) {
+        //If the player just started jumping
+        if (!wasJumping) {
+          changeMoveSet(jump, 0.3);
+          velY = -7;
+        }
+        //If player is in the process of jumping
+        else {
+          //If rising up
+          if (velY <= 0) {
+            if (moveFramePoint >= 2) {
+              moveFrameIncrementor = 0;
+              moveFramePoint = 2;
+            }
+          }
+          //If falling down
+          else if (velY > 0) {
+            moveFrameIncrementor = 0.2;
+            if (moveFramePoint > 6) {
+              moveFrameIncrementor = 0;
+              moveFramePoint = 6;
+            }
+          }
+          //If hitting the ground, automatically go into still mode
+          if (moveSetComplete()) {
+            changeMoveSet(still, 0.4);
+            isJumping = false;
+            wasJumping = false;
+            isStanding = true;
+          }
+          //moveFrame += moveFrameIncrementor;
+        }
+      }
+      
+The idea is to have the player animations freeze when they're at the peak of their jump, and I tried to do this by mapping the player velocity to the frame of the animation. This, however, didn't work out properly so I ended up doing a bit of hardcoding so that the frames are stopped when they reach a certain point. However, I plan to get back to this if I have more time in the future (given the other projects, midterms, and deadlines, things ain't lookin' too bright).
+
+#### Oct. 20
+
+Uploaded the latest version of the code. Will upload images in a bit. Maybe tomorrow. Will work on the animations a bit more. The best thing (or at least what I'm hoping to be the best thing) is that the player class will most likely be the only thing I need besides the background and stage setup, since I can base the enemies and bosses (maybe) on the class. This was also another reason behind the movement booleans, since I can just set a few values to true and get them to do things.
