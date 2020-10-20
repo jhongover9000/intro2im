@@ -22,6 +22,12 @@ I have grand plans, but chances are my lack of experience and time will keep me 
 
 [October 17](journal.md#oct-17)
 
+[October 18](journal.md#oct-18)
+
+[October 19](journal.md#oct-19)
+
+[October 20](journal.md#oct-20)
+
 
 #### Oct. 13
 
