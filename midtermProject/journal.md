@@ -206,3 +206,7 @@ The idea is to have the player animations freeze when they're at the peak of the
 #### Oct. 20
 
 Uploaded the latest version of the code. Will upload images in a bit. Maybe tomorrow. Will work on the animations a bit more. The best thing (or at least what I'm hoping to be the best thing) is that the player class will most likely be the only thing I need besides the background and stage setup, since I can base the enemies and bosses (maybe) on the class. This was also another reason behind the movement booleans, since I can just set a few values to true and get them to do things.
+
+#### Oct. 22
+
+Worked on the animations a bit more, then I realized that what I'm thinking of is *way* too much to do in the next 4-5 days on top of everything I have to do and study for. I know that I'm going to probably use this player animaton anyway, so I'm going to work on it and finish it, but I'll rethink the plans that I have for the actual game itself and how it's going to work. The game that I have in mind is, bluntly put, beyond my capabilities. I didn't have any experience coding until recently, and even now I'm still not exactly great at it. I will try and implement the ideas I have, but there *will* come a point where I need to rethink what I'm doing, and that'll be tomorrow. For now, I'm just going to refine the player animations.
