@@ -28,6 +28,9 @@ I have grand plans, but chances are my lack of experience and time will keep me 
 
 [October 20](journal.md#oct-20)
 
+[October 22](journal.md#oct-22)
+
+[October 23](journal.md#oct-23)
 
 #### Oct. 13
 
@@ -210,3 +213,20 @@ Uploaded the latest version of the code. Will upload images in a bit. Maybe tomo
 #### Oct. 22
 
 Worked on the animations a bit more, then I realized that what I'm thinking of is *way* too much to do in the next 4-5 days on top of everything I have to do and study for. I know that I'm going to probably use this player animaton anyway, so I'm going to work on it and finish it, but I'll rethink the plans that I have for the actual game itself and how it's going to work. The game that I have in mind is, bluntly put, beyond my capabilities. I didn't have any experience coding until recently, and even now I'm still not exactly great at it. I will try and implement the ideas I have, but there *will* come a point where I need to rethink what I'm doing, and that'll be tomorrow. For now, I'm just going to refine the player animations.
+
+#### Oct. 23
+
+By refine animations, it seems as though I need to do a lot of things because I realized during my coding that user input is going to be an issue, especially when it comes to being able to do multiple moves at the same time. My most common problem was the character moving while attacking and getting stuck in an animation loop, which is showing me the downside of selecting boolean values to be my source of differentiation between movesets. It's gotten extremely complicated to the point that I need to set a bunch of conditions for each key pressed, like this:
+
+      else if (keyCode == 65) {
+        if (player.isStanding && !player.wasCrouching && (player.isStill() || player.wasStill() || player.wasWalking) ) {
+          player.isWalking = true;
+          player.dir = -1;
+        }
+      }
+      
+This code is only for a single command, to send the player into a walking animation. I wanted to use boolean values in the beginning because I wanted to make the program read the position of the character faster (0 or 1s opposed to string values), but right now in terms of efficiency the two methods are pretty much the same, with all of the conditions I need to add for the player to do the things it could do if they were using a single variable which could be changed to represent a certain moveset. Either that, or I could have two variables –– one representing standing/crouching/jumping and the other representing the actual actions of the player.
+
+Right now, I have my update() function set up in a divisional form –– in other words, by position booleans. This means that each position (standing, crouching, jumping) has its own if-segments. If I switched this to a functional form –– by actions like attacking, guarding, and being passive (I realize that jumping can also be considered a part of this), this might lessen the number of conditions I need to put on a key press because the update() function would handle those bits internally.
+
+It's kinda crazy right now because I spent so long on trying to get the images to load properly and now I'm trying to get the player movements to stop glitching. I'm at a point in the road where I choose the slightly less efficient code (what I have right now with the booleans) or try and change to some kind of numbering system and hope that's more efficient. Either way, I need to get the player animations done and test if the functions for the NPCs will work (attack, walk, guard, etc.). Theoretically it should but theoretically I should have been done with the player animations a long time ago.
