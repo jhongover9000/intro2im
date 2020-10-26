@@ -230,3 +230,60 @@ This code is only for a single command, to send the player into a walking animat
 Right now, I have my update() function set up in a divisional form –– in other words, by position booleans. This means that each position (standing, crouching, jumping) has its own if-segments. If I switched this to a functional form –– by actions like attacking, guarding, and being passive (I realize that jumping can also be considered a part of this), this might lessen the number of conditions I need to put on a key press because the update() function would handle those bits internally.
 
 It's kinda crazy right now because I spent so long on trying to get the images to load properly and now I'm trying to get the player movements to stop glitching. I'm at a point in the road where I choose the slightly less efficient code (what I have right now with the booleans) or try and change to some kind of numbering system and hope that's more efficient. Either way, I need to get the player animations done and test if the functions for the NPCs will work (attack, walk, guard, etc.). Theoretically it should but theoretically I should have been done with the player animations a long time ago.
+
+#### Oct. 25
+
+I've come across a problem in the coding for the enemies, mainly that they seem to be freezing up when they get within range of the player. I don't know if this has to do with the function I wrote. Here it is:
+
+    //If player is not in hitting range, walk towards player. Jump if player is jumping.
+        if (distance(player) >= imgWidth/2) {
+          if (frameCount%180 == 30) {
+            attack(2);
+          } else
+            if (player.locX > locX) {
+              walkRight();
+            } else if (player.locX < locX) {
+              walkLeft();
+            }
+          if (distance(player) < imgWidth && player.locY > locY) {
+            jump();
+          }
+        }
+        //Once in hitting range, select a move randomly
+        else if (distance(player) < imgWidth/2) {
+          print(isStill());
+          if(isWalking){
+            isWalking = false;
+            changeMoveSet(still, 0.4);
+          }
+          else if ( isStill() || ((wasAttacking || wasJumping) && moveSetComplete()) || ((isGuarding || isWalking) && completeCount > 30 )) {
+            setCurrentActionsFalse();
+            int diceRoll = rand.nextInt(6);
+            if (diceRoll%2 == 0) {
+              attack(0);
+            } else if (diceRoll%2 == 1) {
+              guard();
+            }
+          }
+        }
+        
+I don't understand what's wrong with the code. For some reason the enemy just keeps freezing up. The moveFrame is fixed at 2 and the moveFrameIncrementor is fixed at 0. I have no idea what's going on.
+
+Okay, so I had a moment of realization where I found out I was being really stupid for a full two hours changing everything in the code when the problem was that I never got the enemy to "unblock". Here's part of the code for the blocking section:
+
+    //If starting to guard
+        if (!wasGuarding) {
+          if (isStanding) {
+            changeMoveSet(guard, 0.6);
+          } else if (isCrouching) {
+            changeMoveSet(crouchGuard, 0.3);
+          }
+        }
+
+        //Keeps player in 'blocking' frame
+        if (moveFramePoint >= 2) {
+          moveFrameIncrementor = 0;
+          moveFramePoint = 2;
+        }
+        
+So stupid me never thought about how the action booleans aren't automatically reset, and as I mentioned I've had issues with the functions resetting them. Well, it turns out that the enemy character was never moving out of guarding, which was why the moveFrame was fixed at 2 and the incrementor at 0. I don't know why I do such stupid things...
