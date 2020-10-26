@@ -308,3 +308,5 @@ Super simple, but it'll help out a lot when dealing with character animations. I
 #### Oct. 26
 
 So, I need to make the class for stages and then create the class for the game itself, which has a menu and instructions. That's what I'll be working on today, and try to finish this stupidly-big project that I have no idea if I can finish in time. Next time, I'll try to be less ambitious with my work (I'll choose something within my skill range).
+
+My life right now in a nutshell is nullPointerException. I don't know why I'm getting this problem. Everything works fine when I have them in separate classes, but when I put them together in a stage class everything breaks down. I've been trying to figure this out for the past hour and a half. Don't have a lot of time left...
