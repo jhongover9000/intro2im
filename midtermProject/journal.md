@@ -32,6 +32,10 @@ I have grand plans, but chances are my lack of experience and time will keep me 
 
 [October 23](journal.md#oct-23)
 
+[October 25](journal.md#oct-23)
+
+[October 26](journal.md#oct-23)
+
 #### Oct. 13
 
 So... The problems are already here. Started very basic by formatting the file I'm using. Wrote down in pseudocode how I'm thinking of structuring the code,
@@ -287,3 +291,20 @@ Okay, so I had a moment of realization where I found out I was being really stup
         }
         
 So stupid me never thought about how the action booleans aren't automatically reset, and as I mentioned I've had issues with the functions resetting them. Well, it turns out that the enemy character was never moving out of guarding, which was why the moveFrame was fixed at 2 and the incrementor at 0. I don't know why I do such stupid things...
+
+Other than that, I set up the hit animations so that there's one for when you're crouching and another for when you're standing/jumping. They're based off of the function moveSetComplete(), which I mentioned previously. Here's the actual function:
+
+    //check whether the move set has been completed (for attacking, jumping)
+      boolean moveSetComplete() {
+        if (moveFramePoint + moveIndexStart >= moveIndexStop) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+Super simple, but it'll help out a lot when dealing with character animations. I've also more or less finished the enemy programming, which is a simple guard-or-attack system that follows the player if they're out of range. Also, there's a slight chance that it'll pull off a ranged attack when it's too far away from the character. This means that you might have random objects flying at you out of nowhere. It's all part of the fun, right?
+
+#### Oct. 26
+
+So, I need to make the class for stages and then create the class for the game itself, which has a menu and instructions. That's what I'll be working on today, and try to finish this stupidly-big project that I have no idea if I can finish in time. Next time, I'll try to be less ambitious with my work (I'll choose something within my skill range).
