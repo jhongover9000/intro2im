@@ -315,3 +315,5 @@ My life right now in a nutshell is nullPointerException. I don't know why I'm ge
 
 Okay, so it's currently 2 AM. I have a lot of things I finished, but I think I'll write about them after I sleep.
 Technically, to fulfill the criteria, all I need is to add sound. However, I'd like to add a moving background and some movie files as well, if possible.
+
+Okay. So, first off, fixed the nullPointerException. The problem was I was trying to instantiate a custom object in a constructor, and that was throwing off the compiler. I've created a main menu, too, and set up a system to move stages and to also to reset the game upon death. I particularly like my instruction screen, where you can actually play around with the character to get a hang of the moves before setting out in the actual game. What I have to do in the next few hours is a) put in sound files b) add more character files (and rename them <-- this takes the longest) and c) put in backgrounds for both the game and the main menu. So here we go.
