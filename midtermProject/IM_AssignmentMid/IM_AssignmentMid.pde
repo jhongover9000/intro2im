@@ -1678,7 +1678,7 @@ class Game {
           newStage = false;
         }
         stage.display();
-        this.score = stage.score;
+        
 
         //If player dies, move to game over.
         if (player.playerDeath && player.moveSetComplete()) {
@@ -1773,7 +1773,6 @@ class Game {
   //Game Execution
 
   void draw() {
-    background(0);
     game.play();
   }
 
@@ -1888,6 +1887,7 @@ class Game {
         game.stageNum++;
         game.backgroundSet = (1 + game.backgroundSet) % 3;
         game.newStage = true;
+        game.score += game.stage.score;
         //Boss on stage 4
         if (game.stageNum > 3) {
           game.stage = new Stage(game.currentLevel, player, game.backgroundSet, true);
