@@ -11,13 +11,14 @@ Here are some screenshots and explanations of the game/random ideas I had.
 ##### Title Screen
 
 ![titlescreen](IM_Midterm_Screenshot1.png)
+![](IM_Midterm_Screenshot7.png)
 
 This is the title screen. It looks decent, but simple, but there's a catch –– do you notice that button that says "Change Background"? Yes, this is one of those random ideas I had when I was making the interface. I got the idea from Nier: Automata, at least I'd like to say I did (since it was a random idea I thought was really cool). Every 500 frames, the background changes. Of course, it's all SAO themed (sorry for being a weeb). In addition, there's music, too, which is always a plus. When I made this I just sat around for a few minutes watching the screen change and listening to the music.
 
 ##### Instruction Screen
 
 ![instructions](IM_Midterm_Screenshot2.png)
-![](IM_Midterm_Screenshot7.png)
+
 
 This is the instruction screen. Do you notice something about it? Yes, that's right. It's an *interactive* instruction screen. There are some tips and controls on the side, but you don't really know what you can do unless you try it yourself. You can make the player move, attack, block, and everything it can do in the game itself. This was also a random idea which stemmed from my character selection idea, which was also random, but I'll show you that next.
 
