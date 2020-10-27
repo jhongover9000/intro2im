@@ -1,3 +1,4 @@
+
 //IM Assignment 6 (Midterm): A Game.
 //Joseph Hong
 //Description: This is a generic sidescroller where you level up by killing enemies. Each stage boosts up a level with
@@ -30,14 +31,21 @@ float screenHeight = 405;
 //Character image width and height
 int characterImageWidth = 300;
 int characterImageHeight = 207;
+//Selection of main character
+int mainCharSelect;
 
-int ground = 275;
+int ground = 375;
 
 //Decides difficulty increment per stage
 int levelInc = 10;
 
+//Character Files
+//Main
 CharacterFile krt = new CharacterFile("kirito", 70, 15, 0);
 CharacterFile asn = new CharacterFile("asuna", 70, 5, 0);
+//Enemies
+CharacterFile yki = new CharacterFile("yuuki", 70, 0, 0);
+CharacterFile akr = new CharacterFile("akira", 70, 0, 0);
 
 //UI Stuff for game
 PFont font; 
@@ -57,7 +65,7 @@ ArrayList<ArrayList<PImage> > backgroundSets = new ArrayList<ArrayList<PImage> >
 
 
 
-Player player = new Player(characterImageWidth/2, (characterImageHeight/2 + ground));
+Player player = new Player(characterImageWidth/2, (ground - characterImageHeight/2));
 
 Game game = new Game(player);
 
@@ -81,10 +89,17 @@ void setup() {
 
   font = createFont("SAOUITT-Regular.ttf", 32);
 
+  //Load main characters
   loadImages(krt);
   loadImages(asn);
   characters.add(krt);
   characters.add(asn);
+
+  //Load enemies
+  loadImages(yki);
+  loadImages(akr);
+  characters.add(yki);
+  characters.add(akr);
 
   player.linkImageSets(characters.get(0));
   loadBackgrounds(3);
@@ -187,15 +202,17 @@ class Entity {
   int dir;            //direction
 
   boolean gravity() {
-    if (locY + imgHeight/2 < ground) {
+    print(locY + characterImageHeight/2);
+    print("\n" + ground +"\n");
+    if (locY + characterImageHeight/2 < ground) {
       velY += 0.3;
-    } else if (locY + imgHeight/2 >= ground) {
-      velY = ground - (locY + imgHeight);
-      if (locY + imgHeight/2 > ground) {
-        velY = ground - (locY + imgHeight);
+    } else if (locY + characterImageHeight/2 >= ground) {
+      velY = ground - (locY + characterImageHeight/2);
+      if (locY + characterImageHeight/2 > ground) {
+        velY = ground - (locY + characterImageHeight/2);
       }
     }
-    if (locY + imgHeight == ground) {
+    if (locY + characterImageHeight/2 == ground) {
       return true;
     } else {
       return false;
@@ -1121,7 +1138,7 @@ class Projectile extends Entity {
     if (timer == 0) {
       if (isKnockback) {
         velX = 3*dir;
-        locY = ground;
+        locY = ground + locY/2;
       } else {
         velX = 5*dir;
       }
@@ -1137,11 +1154,11 @@ class Projectile extends Entity {
     //Display if projectile, but not knockback
     if (!isKnockback) {
       fill(240);
-      circle(locX-middleX, locY, 10);
-    } else {
-      fill(240);
-      circle(locX-middleX, ground, 10);
-    }
+      circle(locX-middleX, locY, 10);}
+    // } else {
+    //   fill(240);
+    //   circle(locX-middleX, locY + locY/2, 10);
+    // }
   }
 }
 
@@ -1203,17 +1220,18 @@ class Stage {
     if (newStage) {
       //If boss stage, spawn boss
       if (bossStage) {
-
-        Enemy boss = new Enemy(rand.nextInt((int)stageWidth), (characterImageHeight/2 + ground), level*5);
-        boss.linkImageSets(characters.get(0));
+        Enemy boss = new Enemy(rand.nextInt((int)stageWidth), (ground - characterImageHeight/2), level*5);
+        //Spawns the other character that wasn't selected at beginning
+        boss.linkImageSets(characters.get( (mainCharSelect+1)%2 ) );
         enemies.add(boss);
+        newStage = false;
       }
       //Else, load enemies
       else {
         for (int i = 0; i < 5; i++) {
           print(level);
-          Enemy temp = new Enemy(rand.nextInt((int)stageWidth), (characterImageHeight/2 + ground), level);
-          temp.linkImageSets(characters.get(0));
+          Enemy temp = new Enemy(rand.nextInt((int)stageWidth), (ground - characterImageHeight/2), level);
+          temp.linkImageSets(characters.get( rand.nextInt(2) + 2 ));
           enemies.add(temp);
           newStage = false;
         }
@@ -1223,8 +1241,8 @@ class Stage {
       //Every 300 counts, spawn a random enemy in a random location if less than 5 (in front of the player)
       if (enemies.size() < 5) {
         if (enemies.size() == 0 || frameCount%300 == 0) {
-          Enemy temp = new Enemy(rand.nextInt((int)stageWidth), (characterImageHeight/2 + ground), level);
-          temp.linkImageSets(characters.get(0));
+          Enemy temp = new Enemy(rand.nextInt((int)stageWidth), (ground - characterImageHeight/2), level);
+          temp.linkImageSets(characters.get( rand.nextInt(2) + 2 ));
           enemies.add(temp);
         }
       }
@@ -1237,103 +1255,103 @@ class Stage {
     }
 
       //Projectile updated to player
-      for (Projectile p : projectiles) {
+    for (Projectile p : projectiles) {
         //If timer is up, remove
-        if (p.timer >= 60) {
-          usedProjectiles.add(p);
+      if (p.timer >= 60) {
+        usedProjectiles.add(p);
+        continue;
+      }
+        //Only update (don't calc) if player's
+      if (p.isFromPlayer) {
+        p.update();
+      }
+        //If not, check
+      else {
+        if (p.locX > (player.locX - player.imgWidth/8) && p.locX < (player.locX + player.imgWidth/8)) {
+          if (p.locY < (player.locY+player.imgHeight/3)) {
+              //If hit, do the relative amount of damage for attack type. Damagae is based on first enemy in array.
+            player.dir = -1*p.dir;
+              //Knockback remains for all 20 counts
+            if (p.isKnockback) {
+              if (player.isGuarding) {
+                player.currentHP -= p.damage/2;
+                player.blockCount--;
+              } else {
+                player.takeDamage(p.damage);
+                player.locX -= player.dir;
+              }
+            }
+              //burst disappears after hit
+            else {
+              if (player.isGuarding) {
+                player.currentHP -= p.damage/2;
+                player.blockCount--;
+              } else {
+                player.takeDamage(p.damage);
+                player.locX -= player.dir;
+              }
+              usedProjectiles.add(p);
+            }
+          }
+        }
+        p.update();
+      }
+    }
+    projectiles.removeAll(usedProjectiles);
+
+      //Update enemies & projectiles and if dead, remove from game
+    for (Enemy i : enemies) {
+        //print("\n X: " + i.locX + "    Y:" + i.locY + "\n");
+      for (Projectile p : projectiles) {
+          //If enemy projectile, ignore
+        if (!p.isFromPlayer) {
           continue;
         }
-        //Only update (don't calc) if player's
-        if (p.isFromPlayer) {
-          p.update();
-        }
-        //If not, check
+          //If not, compare locations
         else {
-          if (p.locX > (player.locX - player.imgWidth/8) && p.locX < (player.locX + player.imgWidth/8)) {
-            if (p.locY < (player.locY+player.imgHeight/3)) {
-              //If hit, do the relative amount of damage for attack type. Damagae is based on first enemy in array.
-              player.dir = -1*p.dir;
-              //Knockback remains for all 20 counts
+          if (p.locX > (i.locX - i.imgWidth/8) && p.locX < (i.locX + i.imgWidth/8)) {
+            if (p.locY < (i.locY+i.imgHeight/3)) {
+                //If hit, do the relative amount of damage for attack type
+              i.dir = -1*p.dir;
+                //Knockback remains for all counts, if guarding you only take damage
               if (p.isKnockback) {
-                if (player.isGuarding) {
-                  player.currentHP -= p.damage/2;
-                  player.blockCount--;
+                if (i.isGuarding) {
+                  i.currentHP -= p.damage/2;
                 } else {
-                  player.takeDamage(p.damage);
-                  player.locX -= player.dir;
+                  i.takeDamage(p.damage);
+                  i.locX -= i.dir;
                 }
               }
-              //burst disappears after hit
+                //burst disappears after hit
               else {
-                if (player.isGuarding) {
-                  player.currentHP -= p.damage/2;
-                  player.blockCount--;
+                if (i.isGuarding) {
+                  i.currentHP -= p.damage/2;
                 } else {
-                  player.takeDamage(p.damage);
-                  player.locX -= player.dir;
+                  i.takeDamage(p.damage);
+                  i.locX -= i.dir;
                 }
+
                 usedProjectiles.add(p);
               }
             }
           }
-          p.update();
         }
       }
-      projectiles.removeAll(usedProjectiles);
-
-      //Update enemies & projectiles and if dead, remove from game
-      for (Enemy i : enemies) {
-        //print("\n X: " + i.locX + "    Y:" + i.locY + "\n");
-        for (Projectile p : projectiles) {
-          //If enemy projectile, ignore
-          if (!p.isFromPlayer) {
-            continue;
-          }
-          //If not, compare locations
-          else {
-            if (p.locX > (i.locX - i.imgWidth/8) && p.locX < (i.locX + i.imgWidth/8)) {
-              if (p.locY < (i.locY+i.imgHeight/3)) {
-                //If hit, do the relative amount of damage for attack type
-                i.dir = -1*p.dir;
-                //Knockback remains for all counts, if guarding you only take damage
-                if (p.isKnockback) {
-                  if (i.isGuarding) {
-                    i.currentHP -= p.damage/2;
-                  } else {
-                    i.takeDamage(p.damage);
-                    i.locX -= i.dir;
-                  }
-                }
-                //burst disappears after hit
-                else {
-                  if (i.isGuarding) {
-                    i.currentHP -= p.damage/2;
-                  } else {
-                    i.takeDamage(p.damage);
-                    i.locX -= i.dir;
-                  }
-
-                  usedProjectiles.add(p);
-                }
-              }
-            }
-          }
-        }
         //Update enemies
-        i.enemyUpdate(player, projectiles);
+      i.enemyUpdate(player, projectiles);
         //Check if enemies are dead
-        if (i.playerDeath && i.moveSetComplete()) {
-          player.currentEXP += i.currentLevel*3;
-          deadEnemies.add(i);
-          score++;
-        }
+      if (i.playerDeath && i.moveSetComplete()) {
+        player.currentEXP += i.currentLevel*3;
+        deadEnemies.add(i);
+        score++;
       }
+    }
       //Remove all dead enemies and used projectiles
-      enemies.removeAll(deadEnemies);
-      projectiles.removeAll(usedProjectiles);
+    enemies.removeAll(deadEnemies);
+    projectiles.removeAll(usedProjectiles);
 
       //Update player
-      player.update(true, projectiles);
+    player.update(true, projectiles);
 
 
 
@@ -1342,78 +1360,80 @@ class Stage {
 
 
       //This will move the screen along with the player
-      if (player.locX > screenWidth/2 && player.locX < stageWidth) {
-        middleX += player.velX;
-      }
-      //If the player isn't in the middle of the screen (moving forward), then they can go backwards
-      else if (player.locX <= screenWidth/2) {
-        middleX = 0;
-      }
+    if (player.locX > screenWidth/2 && player.locX < stageWidth) {
+      middleX += player.velX;
     }
+      //If the player isn't in the middle of the screen (moving forward), then they can go backwards
+    else if (player.locX <= screenWidth/2) {
+      middleX = 0;
+    }
+  }
 
     //Display
-    void display() {
-      update();
+  void display() {
+    update();
 
       //Display Background
-      int imgNumber = 4;
+    int imgNumber = 4;
 
       //Using the middleX to make the background "move"
-      for (PImage img : backgroundSets.get(background)) {
-        int x = (int)(middleX/imgNumber) % (int)screenWidth;
+    for (PImage img : backgroundSets.get(background)) {
+      int x = (int)(middleX/imgNumber) % (int)screenWidth;
 
-        imageMode(CORNER);
-        image(img, 0, 0, screenWidth - (x), screenHeight, (int) x, 0, (int) screenWidth, (int) screenHeight);
-        image(img, screenWidth - x, 0, x, screenHeight, 1, 0, (int) x, (int) screenHeight);
-        imgNumber--;
-      }
+      imageMode(CORNER);
+      image(img, 0, 0, screenWidth - (x), screenHeight, (int) x, 0, (int) screenWidth, (int) screenHeight);
+      image(img, screenWidth - x, 0, x, screenHeight, 1, 0, (int) x, (int) screenHeight);
+      imgNumber--;
+    }
       //Make ground (this lowers the lag)
       //fill(10);
       //rect(0,ground - 10, screenWidth, screenHeight - (ground - 10));
 
 
       //Display Projectiles
-      for (Projectile p : projectiles) {
-        p.display(middleX);
-      }
+    for (Projectile p : projectiles) {
+      p.display(middleX);
+    }
 
       //Display Enemies
-      for (Enemy i : enemies) {
-        i.display(middleX);
-      }
+    for (Enemy i : enemies) {
+      i.display(middleX);
+    }
 
-      if (bossStage) {
-        if (newStage && timer < 100) {
-          textAlign(CENTER);
-          textSize(40);
-          fill(255, 0, 0);
-          text("BOSS INCOMING", screenWidth/2, screenHeight/4);
-        }
+    //Display
+    if (bossStage) {
+      if (timer < 100) {
+        textAlign(CENTER);
+        textSize(40);
+        fill(255, 0, 0);
+        text("BOSS INCOMING", screenWidth/2, screenHeight/4);
+        timer++;
       }
+    }
 
       //If player reaches edge of stage, give choice to stay or progress
-      if (player.locX >= stageWidth - player.imgWidth) {
-        if (player.locX >= stageWidth) {
-          player.locX = stageWidth;
-        }
-        textAlign(CENTER, CENTER);
-        fill(0);
-        textSize(20);
-        text("Move to next stage? \n Press SPACE to proceed, go back to stay in stage.", screenWidth/2, screenHeight/4);
-        //Gives option to move to next stage
-        stageEnd = true;
-      } else {
-        stageEnd = false;
+    if (player.locX >= stageWidth - player.imgWidth) {
+      if (player.locX >= stageWidth) {
+        player.locX = stageWidth;
       }
+      textAlign(CENTER, CENTER);
+      fill(0);
+      textSize(20);
+      text("Move to next stage? \n Press SPACE to proceed, go back to stay in stage.", screenWidth/2, screenHeight/4);
+        //Gives option to move to next stage
+      stageEnd = true;
+    } else {
+      stageEnd = false;
+    }
 
       //Display Player
-      player.display(middleX);
-    }
+    player.display(middleX);
   }
+}
 
   //Game Class
-  class Game {
-    int gameState = 6;
+class Game {
+  int gameState = 6;
     int score;        //aka number of enemies killed
     int currentLevel = 1;
     int backgroundSet = 0;
@@ -1431,7 +1451,6 @@ class Stage {
     int frame2 = 0;    
     float framePoint2 = 0;
     float frameInc2 = 0.3;
-    int mainCharSelect;
     boolean characterSelected = false;
 
     //Mouse released
@@ -1442,7 +1461,7 @@ class Stage {
     Stage stage;
 
 
-    Player player = new Player(characterImageWidth/2, (characterImageHeight/2 + ground));
+    Player player;
 
 
     Game(Player player) {
@@ -1484,7 +1503,7 @@ class Stage {
 
     void stopMusic(ArrayList<SoundFile> music) {
       for (SoundFile i : music) {
-        i.stop();
+        if(i.isPlaying()){i.stop();}
       }
     }
 
@@ -1494,16 +1513,19 @@ class Stage {
       //Music
       //Stop others, play right file
       if (gameState <= 2 && (newGame || !openingOST.isPlaying()) ) {
-        victory.stop();
-        defeat.stop();
+        if(victory.isPlaying()){victory.stop();}
+        if(defeat.isPlaying()){defeat.stop();}
+        if(openingOST.isPlaying()){openingOST.stop();}
         stopMusic(stageMusic);
-        openingOST.play();
+        if (!openingOST.isPlaying()){
+          openingOST.play();
+        }
       }
       //Game
       else if (gameState == 3 && stage.newStage) {
-        victory.stop();
-        defeat.stop();
-        openingOST.stop();
+        if(victory.isPlaying()){victory.stop();}
+        if(defeat.isPlaying()){defeat.stop();}
+        if(openingOST.isPlaying()){openingOST.stop();}
         stopMusic(stageMusic);
         //If boss, play boss music
         if (stage.bossStage) {
@@ -1511,18 +1533,18 @@ class Stage {
         }
         //Else select normal track
         else {
-          stageMusic.get(stageNum%2).play();
+          if(!stageMusic.get(stageNum%2).isPlaying()){stageMusic.get(stageNum%2).play();}
         }
       }
       //Game Over
-      else if (gameState == 4) {
-        victory.stop();
+      else if (gameState == 4 && !defeat.isPlaying()) {
+        if(victory.isPlaying()){victory.stop();}
         stopMusic(stageMusic);
         defeat.play();
       }
       //Victory
-      else if (gameState == 5) {
-        defeat.stop();
+      else if (gameState == 5 && !victory.isPlaying()) {
+        if(defeat.isPlaying()){defeat.stop();}
         stopMusic(stageMusic);
         victory.play();
       }
@@ -1578,9 +1600,9 @@ class Stage {
         text("Instructions", screenWidth/2, screenHeight/8);
         textAlign(LEFT);
         textSize(12);
-        text("Move around with WASD. \nNormal Attack: Left Click (Mouse)\nGuard: Right Hold (Mouse)\n" +
-          "Guard decreases damage received, and prevents player from flinching.\n\n" +"Specials: require MP, gained by hitting enemies.\n" + 
-          "Burst Attack: X (5 MP)   \nKnockback Attack: C (10 MP)\n\nLevel up to increase and restore HP, MP, and Damage.\n\n" +
+        text("Move around with WASD. \nGuard: Right Hold (Mouse)\n" +
+          "Guard decreases damage received, and prevents player from flinching.\n\nNormal Attack: Left Click (Mouse)" +"Specials: require MP, but are stronger.\n" + 
+          "Burst Attack: X (5 MP)   \nUltra Attack: C (10 MP)\n\nLevel up to increase and restore HP, MP, and Damage.\n\n" +
           "Press SPACE to go back to Main Menu.", screenWidth/20, screenHeight/4, screenWidth/3, screenHeight-screenHeight/12);
 
         //Let player test moves and stuff
@@ -1599,13 +1621,13 @@ class Stage {
         CharacterFile fileOne = characters.get(0);
         CharacterFile fileTwo = characters.get(1);
 
-        //If on right, highlight right
+        //If on right, highlight right (krt)
         if ((5*screenWidth/8 < mouseX && mouseX < 7*screenWidth/8)) {
           fill(30);
           rect(screenWidth/2, 0, screenWidth/2, screenHeight);
           framePoint1 += frameInc1;
           frame1 = (int) (framePoint1 % fileOne.numImagesExtra);
-          image(fileOne.moveSetsExtra.get(frame1), 3*screenWidth/4, screenHeight/2, characterImageWidth, characterImageHeight);
+          image(fileOne.moveSetsExtra.get(frame1), 3*screenWidth/4, screenHeight/2);
           if (mouseClicked) {
             mouseClicked = false;
             mouseReleased = false;
@@ -1618,13 +1640,13 @@ class Stage {
             gameState = 3;
           }
         }
-        //Else, highlight left
+        //Else, highlight left (asn)
         else if ((screenWidth/8 < mouseX && mouseX < 3*screenWidth/8)) {
           fill(30);
           rect(0, 0, screenWidth/2, screenHeight);
           framePoint2 += frameInc2;
           frame2 = (int) (framePoint2 % fileTwo.numImagesExtra);
-          image(fileTwo.moveSetsExtra.get(frame2), screenWidth/4, screenHeight/2, characterImageWidth, characterImageHeight);
+          image(fileTwo.moveSetsExtra.get(frame2), screenWidth/4, screenHeight/2);
           if (mouseClicked) {
             mouseClicked = false;
             mouseReleased = false;
@@ -1650,7 +1672,7 @@ class Stage {
         //Reset Player's location and basic stats
         if (newStage) {
           player.locX = characterImageWidth/2;
-          player.locY = (characterImageHeight/2 + ground);
+          player.locY = (ground - characterImageHeight/2);
           player.currentHP = player.maxHP; 
           player.currentMP = player.maxMP;
           player.blockCount = 5;
