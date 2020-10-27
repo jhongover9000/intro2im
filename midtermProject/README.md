@@ -27,5 +27,20 @@ This is the instruction screen. Do you notice something about it? Yes, that's ri
 
 The character selection screen is pretty cool, tbh, even if I made it. Basically, there are two main characters and you can choose between the two of them. You can't see it here, but they actually have separate animations that are exclusive to the character selection page. You can choose one or the other, and the game will link it to your player and *voila*, you're playing with the character you selected.
 
+##### The Game
+
+![](IM_Midterm_Screenshot5.png)
+
+Nothing too interesting about the game, since it's pretty generic. You fight the enemies who spawn randomly across the map, and gain EXP with each kill. Once you reach the end of the stage, you have the option to go up to the next stage or stay and farm more levels (classic JRPG-style). I wanted people to go through the farming to get to the goal. The boss is insanely, and I mean *insanely* strong, which is why you want to build up as many levels as possible. The game itself takes a good 30 minutes to an hour if you want to beat the boss, but if you tweak the settings (change the level multiplier of the boss, which is normally at 20 –– which makes their level ~800), then you can clear it faster. Oh, there's stage music as well, for normal stages and an exclusive one for the boss stage. This mentality of farming (doing the same action over and over to gain a small reward) is one that I want to introduce to first-time players ;)
+
 #### The Idea
 
+The idea for this game came from about a year ago. I attempted to do something similar to this, but epically failed. I didn't know what I was doing, but this time I had a good grasp of classes and functions so I decided to give it another go. This is mainly because I want to make a game like this with my own hands (and I want to show my brother that I am, indeed, learning things from IM and CS). Anyway, I've always been an SAO fan so I wanted to do something like this. I actually wanted to add videos to the thing but it didn't really work out, with time (and lag from the game) and all.
+
+#### Difficulties.
+
+There were pretty much *only* difficulties for the entire first half of the project. Check out my journal for details on my suffering! Starting from unaccessible files to nullPointerExceptions and targetInvocation errors, I had pretty much every error you can get when dealing with objects and classes. I got through these mostly because I just looked for messed up lines of code –– I feel really stupid because 90% of these problems were solved by changing one line of code. *One line*. The last two days were a mega-push because I decided last minute that I *did* want to go through with the entire project and chose not to settle (at least not that much). I didn't get to add player sound effects (finding the right ones takes too long) and movies (I might add these later, after I turn in this project, just because I want to say I made an SAO game), but I did get most of the features I wanted. On top of that, my random ideas were really nice, too (but were also part of the reason why I didn't have enough time to add SFX and movies).
+
+#### Warning
+
+So, as you can probably see when you open the folder, there are a *lot* of files. This is because the sprites that I found were not your big sprite sheet but were rather individual images, *which I had to rename by hand* (<-- that took me a good 3 hours). Also, there's a font file somewhere in there, so those are just some of the many things I had to add because I couldn't get the program to direct itself to the current working directory using get.SystemProperty("user.dir"). If you want to play, you're going to have to download all of those files or at least one set of character moves and change up the code.
