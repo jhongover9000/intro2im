@@ -34,6 +34,7 @@ The character selection screen is pretty cool, tbh, even if I made it. Basically
 ![](IM_Midterm_Screenshot5.png)
 ![](IM_Midterm_Screenshot6.png)
 ![](IM_Midterm_Screenshot8.png)
+![](IM_Midterm_Screenshot9.png)
 
 Nothing too interesting about the game, since it's pretty generic. You fight the enemies who spawn randomly across the map, and gain EXP with each kill. Once you reach the end of the stage, you have the option to go up to the next stage or stay and farm more levels (classic JRPG-style). I wanted people to go through the farming to get to the goal. The boss is insanely, and I mean *insanely* strong, which is why you want to build up as many levels as possible. The game itself takes a good 30 minutes to an hour if you want to beat the boss, but if you tweak the settings (change the level multiplier of the boss, which is normally at 5 –– which makes their level 100+), then you can clear it faster. Oh, there's stage music as well, for normal stages and an exclusive one for the boss stage. This mentality of farming (doing the same action over and over to gain a small reward) is one that I want to introduce to first-time players ;)
 
