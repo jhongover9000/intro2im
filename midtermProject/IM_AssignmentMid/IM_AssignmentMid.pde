@@ -1698,7 +1698,7 @@ class Game {
         textAlign(CENTER, CENTER);
         fill(100);
         textSize(32);
-        text("Defeat... \nLevel: " + player.currentLevel + "  Stage: " + stageNum+1 + "  Score: " + score + "\n\n Press SPACE to return to menu.", screenWidth/2, screenHeight/2 );
+        text("Defeat... \nLevel: " + player.currentLevel + "  Stage: " + stageNum + "  Score: " + score + "\n\n Press SPACE to return to menu.", screenWidth/2, screenHeight/2 );
       }
 
       //Game Complete
@@ -1874,7 +1874,7 @@ class Game {
     //SPACE -- RESET GAME OR NEW STAGE
     else if (keyCode == 32) {
       //Reset Game
-      if (game.gameState == 1 || game.gameState == 4) {
+      if (game.gameState == 1 || game.gameState == 4 || game.gameState == 5) {
         player = null;
         player = new Player(characterImageWidth/2, characterImageHeight/2+ground);
         game = new Game(player);
