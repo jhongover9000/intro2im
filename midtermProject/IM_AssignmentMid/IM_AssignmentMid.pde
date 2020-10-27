@@ -1,7 +1,10 @@
 //IM Assignment 6 (Midterm): A Game.
 //Joseph Hong
 //Description: This is a generic sidescroller where you level up by killing enemies. Each stage boosts up a level with
-//             harder enemies and stronger bosses.
+//             harder enemies, and there's a boss battle at the end. If you beat the boss, you win! There's music, but
+//             I didn't manage to add all the sound effects for the players (hence the 0 sound files in initialization).
+//             Fun menu that changes backgrounds, and an interactive instruction screen! I had fun making this even if
+//             I spent an all-nighter trying to get it to work. Have fun playing!
 //=======================================================================================================================
 //=======================================================================================================================
 //Imports
