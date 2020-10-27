@@ -32,9 +32,11 @@ I have grand plans, but chances are my lack of experience and time will keep me 
 
 [October 23](journal.md#oct-23)
 
-[October 25](journal.md#oct-23)
+[October 25](journal.md#oct-25)
 
-[October 26](journal.md#oct-23)
+[October 26](journal.md#oct-26)
+
+[October 27](journal.md#oct-27)
 
 #### Oct. 13
 
@@ -324,4 +326,4 @@ Aight, more or less finished with the game. It's not pretty (well actually it is
 
 Renamed another character, so character selection is finally possibe! I need to add 2-3 more characters so that I can have various enemies. Off to work, then!
 
-
+Finished. Didn't have time for the cutscenes in the end, but I plan on adding those in my spare time.
