@@ -4,7 +4,9 @@ So. The midterm project. I guess you could say that this is more or less a succe
 
 #### The Game
 
-What I made is your simple generic sidescroller, with some fun bits and pieces of random ideas (by random I literally mean I was in the middle of coding some things and thought "oh, that sounds fun" and suffered for 4 hours trying to get it to work). Here are some screenshots and explanations of the game.
+What I made is your simple generic sidescroller, with some fun bits and pieces of random ideas (by random I literally mean I was in the middle of coding some things and thought "oh, that sounds fun" and suffered for 4 hours trying to get it to work). You fight through stages of enemies, then take on a boss. However, each stage increases in difficulty, so you need to decide whether you want to keep levelling up or you want to proceed to the next stage. Every time you level up, you gain a bit more HP, MP (needed for skills), and DP (damage points). You also can guard against enemy attacks for reduced damage, but be aware that you have a limited number of blocks before you start taking the full brunt of the attacks!
+
+Here are some screenshots and explanations of the game/random ideas I had.
 
 ##### Title Screen
 
