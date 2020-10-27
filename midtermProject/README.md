@@ -49,3 +49,5 @@ There were pretty much *only* difficulties for the entire first half of the proj
 #### Warning
 
 So, as you can probably see when you open the folder, there are a *lot* of files. This is because the sprites that I found were not your big sprite sheet but were rather individual images, *which I had to rename by hand* (<-- that took me a good 3 hours). Also, there's a font file somewhere in there, so those are just some of the many things I had to add because I couldn't get the program to direct itself to the current working directory using get.SystemProperty("user.dir"). If you want to play, you're going to have to download all of those files or at least one set of character moves and change up the code.
+
+###### Resource for Sprites: https://www.spriters-resource.com/
