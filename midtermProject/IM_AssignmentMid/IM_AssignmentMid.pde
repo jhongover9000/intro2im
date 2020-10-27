@@ -1,4 +1,3 @@
-
 //IM Assignment 6 (Midterm): A Game.
 //Joseph Hong
 //Description: This is a generic sidescroller where you level up by killing enemies. Each stage boosts up a level with
@@ -1138,7 +1137,7 @@ class Projectile extends Entity {
     if (timer == 0) {
       if (isKnockback) {
         velX = 3*dir;
-        locY = ground + locY/2;
+        locY = locY + locY/4;
       } else {
         velX = 5*dir;
       }
@@ -1149,16 +1148,16 @@ class Projectile extends Entity {
     velX *= 1.05;
   }
 
+  //Display
   void display(int middleX) {
     //print("\n X: " + locX + "    Y:" + locY + "\n");
-    //Display if projectile, but not knockback
     if (!isKnockback) {
       fill(240);
-      circle(locX-middleX, locY, 10);}
-    // } else {
-    //   fill(240);
-    //   circle(locX-middleX, locY + locY/2, 10);
-    // }
+      circle(locX-middleX, locY, 10);
+     } else {
+       fill(240);
+       circle(locX-middleX, locY + locY/4, 10);
+     }
   }
 }
 
