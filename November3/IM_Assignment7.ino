@@ -7,9 +7,9 @@
 //====================================================================================================================================
 //Global Variables & Setup
 
-//lights
+//lights (separate)
 const int rLED = 2;   //port 2, red LED
-const int gLED = 3;   //port 3, green LED  
+const int gLED = 3;   //port 3, green LED
 const int bLED = 4;   //port 4, blue LED
 int lights[] = {rLED, gLED, bLED};
 
@@ -19,18 +19,30 @@ const int gButton = 6; //port 6, green button
 const int bButton = 7; //port 7, blue button
 int buttons[] = {rButton, gButton, bButton};
 
+//lights (RGB LED)
+const int rgbRED = 8;   //port 8, red LED
+const int rgbGRE = 9;   //port 9, green LED
+const int rgbBLU = 10;   //port 10, blue LED
+int rgbLED[] = {rgbRED, rgbGRE, rgbBLU};
+
 //stores which button is pressed (3 is the default)
 int buttonPressed = 3;
 
 //to count how many pattern lights the player has matched
 int gameCounter = 0;
+int phaseCounter = 0;
 
-//pattern to follow (6 lights). if changing pattern length, make sure to change both variables!!
-int patternLength = 6;
-int pattern[6];
+//pattern to follow (4 initial, 16 max). increases each phase by 4. if changing pattern lengths, make sure to change both variables!!
+int patternLength = 4;
+int patternIncr = 4;
+int pattern[16];
+//this is the pattern type, which is used in randomSeed(). according to the arduino reference, this makes more random numbers.
+//however, if you have a specific number, you can create a consistent pattern (thought this was kinda clever hehe)
+int patternType = 10;
 
 //whether or not game is over (to reset; starts as true and is set to false)
-bool gameEnded = true;
+bool phaseEnd = true;
+bool gameEnd = true;
 
 //setup
 void setup() {
@@ -42,6 +54,12 @@ void setup() {
   pinMode(5, INPUT_PULLUP);
   pinMode(6, INPUT_PULLUP);
   pinMode(7, INPUT_PULLUP);
+  //rgb LED
+  pinMode(8, INPUT_PULLUP);
+  pinMode(9, INPUT_PULLUP);
+  pinMode(10, INPUT_PULLUP);
+
+  
 
 }
 //====================================================================================================================================
@@ -50,15 +68,15 @@ void setup() {
 
 //make new pattern (reset)
 void newPattern() {
+  randomSeed(patternType);
   for (int i = 0; i < patternLength; i++) {
-    pattern[i] = round(random(0, 3) );
-    //Serial.begin(9600);
-    //Serial.println(pattern[i]);
+    pattern[i] = round(random(3) );
   }
 }
 
 //display the pattern
 void showPattern() {
+  turnOffAll();
   for (int i = 0; i < patternLength; i++) {
     turnOnOne(pattern[i]);
     delay(300);
@@ -121,6 +139,27 @@ void turnOffAll() {
   }
 }
 
+//reset rgb LED to off
+void turnOffAllRGB() {
+  for (int i : rgbLED) {
+    digitalWrite(i, false);
+  }
+}
+
+//next phase! this will light up the rgb LED with one color per turn (all three will result in white)
+void nextPhase() {
+  for (int i = 0; i < 3; i++) {
+    turnOnOne(i % 3);
+    delay(300);
+    turnOffOne(i % 3);
+    delay(300);
+  }
+  turnOffAll();
+  digitalWrite(rgbLED[phaseCounter], true);
+  patternLength += patternIncr;
+
+}
+
 //win sequence
 void win() {
   for (int i = 0; i < 9; i++) {
@@ -133,64 +172,98 @@ void win() {
 
 //lose sequence
 void lose() {
+  turnOffAllRGB();
   for (int i = 0; i < 3; i++) {
     turnOnAll();
     delay(300);
     turnOffAll();
     delay(300);
   }
-
 }
+
+
 //====================================================================================================================================
 //====================================================================================================================================
 //Execution
 
 void loop() {
 
+  //if all phases have been cleared, end game
+  if (phaseCounter == 3) {
+    turnOffAll();
+    delay(300);
+    win();
+    patternLength -= phaseCounter * patternIncr;
+    phaseCounter = 0;
+    gameEnd = true;
+    phaseEnd = true;
+  }
 
-  if (!gameEnded) {
+  //if game is not over, keep the game going
+  if (!phaseEnd) {
     for (int i = 0; i <= patternLength; i++) { //for each button to be pressed in the sequence
+
       //wait for user input
-      while (!gameEnded) {
+      while (!phaseEnd) {
         //if button is pressed, turn on led
         if (buttonPressedCheck() && buttonPressed < 3) {
           turnOnOne(buttonPressed);
           delay(300);
+
           //if the button is the same as the light pattern, then break to next i
           if (checkPattern(buttonPressed, i)) {
             turnOffAll();
             gameCounter++;
-            //if player matches entire pattern they win
+
+            //if player matches entire pattern they move to next phase
             if (gameCounter == patternLength) {
-              win();
-              gameEnded = true;
+              delay(300);
+              nextPhase();
+              phaseCounter++;
+              phaseEnd = true;
+              break;
             }
+
             break;
           }
-          //otherwise end the game
+
+          //otherwise end the game & reset values
           else {
             turnOffAll();
             delay(300);
             lose();
-            gameEnded = true;
+            patternLength -= phaseCounter * patternIncr;
+            phaseEnd = true;
+            gameEnd = true;
             break;
           }
         }
-        //all lights are off otherwise
+        //all lights are off otherwise (minus the RGB LED)
         else {
           turnOffAll();
         }
       }
     }
   }
-  //if game is ended, then when a button is pressed reset
-  else {
+  //if phase AND game is ended, then when a button is pressed reset
+  else if (phaseEnd && gameEnd) {
     if (buttonPressedCheck()) {
+      gameCounter = 0;
+      phaseCounter = 0;
+      phaseEnd = false;
+      gameEnd = false;
+      turnOffAllRGB();
       newPattern();
       showPattern();
-      gameCounter = 0;
-      gameEnded = false;
     }
+  }
+  //if phase is over, then move to next phase
+  else if (phaseEnd) {
+    delay(500);
+    newPattern();
+    showPattern();
+    gameCounter = 0;
+    phaseEnd = false;
   }
 
 }
