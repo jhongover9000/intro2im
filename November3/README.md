@@ -1,6 +1,10 @@
 ### Assignment 7: 3-Light Game
 
-This is a simple game where you match the order of lights to a pattern shown at the beginning. If you win, the lights will blink one at a time, alternating in color. If you lose, all three lights will blink at once. Here's the schematic!
+This is a simple game where you match the order of lights to a pattern shown at the beginning. If you win, the lights will blink one at a time, alternating in color. If you lose, all three lights will blink at once. Here's a pic:
+
+![](IM_Assignment7_Picture.jpg)
+
+Here's the schematic:
 
 ![](IM_Assignment7_Schematic.jpg)
 
