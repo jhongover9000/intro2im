@@ -32,7 +32,7 @@ int buttonPressed = 3;
 int gameCounter = 0;
 int phaseCounter = 0;
 
-//pattern to follow (4 initial, 12 max). increases each phase by 4. if changing pattern lengths, make sure to change both variables!!
+//pattern to follow (4 initial, 12 max). increases each phase by 4. if changing pattern lengths, make sure to change all variables!!
 int patternLength = 4;
 int patternIncr = 4;
 int pattern[12];
