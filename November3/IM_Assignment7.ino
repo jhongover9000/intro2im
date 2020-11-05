@@ -56,9 +56,9 @@ void setup() {
   pinMode(6, INPUT_PULLUP);
   pinMode(7, INPUT_PULLUP);
   //rgb LED
-  pinMode(8, INPUT_PULLUP);
-  pinMode(9, INPUT_PULLUP);
-  pinMode(10, INPUT_PULLUP);
+  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
 
   
 
