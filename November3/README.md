@@ -16,6 +16,8 @@ When I heard "a puzzle using 3 lights and buttons" I immediately thought of this
 
 So, normally, this was going to end at just three LEDs and one phase. However, I had a sudden burst of inspiration in the shower (just like everyone does) and thought that I could create "phases" so you're unlocking a code of some kind. As I sat down and worked with random(), I realized it was borderline impossible to remember the patterns if each phase kept changing. I looked into randomSeed() and found that if I put in a static value (i.e. 10), then the pattern would remain the same no matter what (since randomSeed() is taking the argument to set an anchor basically)! I just thought this was clever, since I didn't have to change most of my code and could implement the phases with randomSeed(). I just thought that was kinda clever :))
 
+Update: I set patternType, which is the variable that goes into randomSeed(), to be changed to a new number every game, which means that different patterns will be used every game! Thought this was really cool~!
+
 #### Difficulties
 
 So, when I first started, I wanted to use the STL vector but realized that it wasn't working. Like at *all*. Turns out downloading and using libraries is a lot more complicated than I thought it was, because I kept getting "error compiling for board arduino uno" as an exception, which made me end up using normal arrays (err *static* arrays).
