@@ -32,13 +32,14 @@ int buttonPressed = 3;
 int gameCounter = 0;
 int phaseCounter = 0;
 
-//pattern to follow (4 initial, 12 max). increases each phase by 4. if changing pattern lengths, make sure to change all variables!!
+//pattern to follow (4 initial, 16 max). increases each phase by 4. if changing pattern lengths, make sure to change both variables!!
 int patternLength = 4;
 int patternIncr = 4;
-int pattern[12];
+int pattern[16];
 //this is the pattern type, which is used in randomSeed(). according to the arduino reference, this makes more random numbers.
 //however, if you have a specific number, you can create a consistent pattern (thought this was kinda clever hehe)
-int patternType = 10;
+//update: I had this cool idea that I could change this every game, giving a new pattern every game
+int patternType;
 
 //whether or not game is over (to reset; starts as true and is set to false)
 bool phaseEnd = true;
@@ -250,6 +251,8 @@ void loop() {
     if (buttonPressedCheck()) {
       gameCounter = 0;
       phaseCounter = 0;
+      //Set new pattern
+      patternType = round(random(50));
       phaseEnd = false;
       gameEnd = false;
       turnOffAllRGB();
