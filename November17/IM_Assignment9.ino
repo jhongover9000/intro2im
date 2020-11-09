@@ -72,8 +72,6 @@ void setup() {
   pinMode(5, INPUT_PULLUP);
   pinMode(6, INPUT_PULLUP);
 
-  pinMode(7, INPUT_PULLUP);   //photoresistor imitates touch for sharp note
-
   //Output
   pinMode(12, OUTPUT);        //'power' LED
 
@@ -252,8 +250,8 @@ void playNote(int potPosition, int photoResist, int keyNum) {
 void loop() {
 
   //Set analog values as variables
-  int potPosition = analogRead(A0);
-  int photoResist = analogRead(A1);
+  int potPosition = analogRead(A0);   //key scale
+  int photoResist = analogRead(A1);   //sharp key
 
   //Serial.println(potPosition);
 
