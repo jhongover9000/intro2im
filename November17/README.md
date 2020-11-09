@@ -12,7 +12,7 @@ Well, this kinda came from the whole reading about physical computing, that keyb
 
 Anyway, merely making a keyboard seemed way too simple, so I decided to add a potentiometer to add an adjustable aspect to it, so that by turning the potentiometer you could get lower/higher notes along the scale. This idea was inspired by how the keyboards are like in Garage Band for iOS devices, where you swipe to reach higher scales and stuff.
 
-![IM Assignment 9 :)](IM_Assignment9_Photo.jpeg)
+![IM Assignment 9 :)](IM_Assignment9_Photo.jpg)
 
 Here's how it turned out. Lots of wires and sensors and... *stuff*. But it works, and that's what's important.
 
