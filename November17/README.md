@@ -14,7 +14,12 @@ Anyway, merely making a keyboard seemed way too simple, so I decided to add a po
 
 ![IM Assignment 9 :)](IM_Assignment9_Photo.jpg)
 
-Here's how it turned out. Lots of wires and sensors and... *stuff*. But it works, and that's what's important.
+Here's how it turned out. Lots of wires and sensors and... *stuff*. But it works, and that's what's important. Here are some videos:
+
+[Introduction to Assignment](https://drive.google.com/file/d/1ovrw_DdjHRrVVYRjEg9yuM-eFhDvY8nn/view?usp=sharing)
+
+[Shorter Demo](https://drive.google.com/file/d/1Ykhotjju8yu--ouMAhzdc5LU44-nzMB-/view?usp=sharing)
+
 
 #### The Code
 
