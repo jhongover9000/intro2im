@@ -1,6 +1,8 @@
 ### Assignment 8: LED Escape Room
 
-This project is a mini escape room with four different types of locks. Each lock requires a specific kind of combination (potentiometer + photoresistor, buttons + switch, potentiometer + switch, potentiometer + buttons), and if you unlock a lock, an LED lights up showing that you completed it. Locks that require a button will light up if you press both buttons then let go of one (as a hint), but will also blink gently when you press a single button/hold both buttons if you don't want glaring light in your eyes as you try to solve the puzzle.
+This project is a mini escape room with four different types of locks. Each lock requires a specific kind of combination (potentiometer + photoresistor, buttons + switch, potentiometer + switch, potentiometer + buttons), and if you unlock a lock, an LED lights up showing that you completed it. The game starts when you press a button, and will reset when you press a button after you escape.
+
+Note: Locks that require a button will light up if you press both buttons then let go of one (as a hint), but will also blink gently when you press a single button/hold both buttons if you don't want glaring light in your eyes as you try to solve the puzzle. 
 
 
 #### The Idea & Result
