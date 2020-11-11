@@ -1,6 +1,6 @@
 ### The Journ(ey)al
 
-[Day 1]()
+[Day 1](journal.md#day-1)
 
 #### Day 1 (11/11)
 
