@@ -6,14 +6,17 @@ So. I don't actually know if this will work, but I want to make a remake of Flap
 
 I don't really think I need to introduce Flappy Bird, but it's basically a game where you tap the screen to make a bird on the screen fly. Every tap makes it go up by a certain amount, and if you don't tap the screen it'll fall to the ground. Also, there are obstacles that you need to avoid hitting, too.
 
-![](flappybirdpic)
+![](flappybirdpic.jpg)
 
 So that's the game. What I made ended up being really similar (because I got my hands on the image assets, yay!); here it is:
 
-![](IM_Assignment10_Pic.png)
+![](IM_Assignment10_Pic.jpg)
 ![](IM_Assignment10_Screenshot1.png)
 ![](IM_Assignment10_Screenshot2.png)
 ![](IM_Assignment10_Screenshot3.png)
+
+
+[Here's a intro/demo of the game!](https://drive.google.com/file/d/184I3wFvarjWNd1MklSBSoUiWSwLQtOfP/view?usp=sharing)
 
 #### The Schematic
 
