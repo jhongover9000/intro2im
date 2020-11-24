@@ -8,7 +8,7 @@ I don't really think I need to introduce Flappy Bird, but it's basically a game 
 
 ![](flappybirdpic.jpg)
 
-So that's the game. What I made ended up being really similar (because I got my hands on the image assets, yay!).
+So that's the game. What I made ended up being really similar (because I got my hands on the image assets, yay!). It has almost all the same stuff (minus a pause button and those medal things). Instead of tapping, I changed it to a button. You press to start, press while playing, and press to restart if you lose.
 
 ![](IM_Assignment10_Pic.jpg)
 ![](IM_Assignment10_Screenshot1.png)
