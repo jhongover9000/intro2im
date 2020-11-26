@@ -1,6 +1,6 @@
 ### The Journ(ey)al
 
-[Day 1](journal.md#day-1)
+[Day 1](journal.md#day-1) [Day 2](journal.md#day-2) [Day 3](journal.md#day-3) [Day 4](journal.md#day-4) [Day 5](journal.md#day-5) [Day 6](journal.md#day-6)
 
 #### Day 1 (11/11)
 
