@@ -27,3 +27,5 @@ Speaking of timers... Not a lot of time left until I need to start working on th
 #### Day 5 (11/26)
 
 A bank heist. That's what I can make. Thought of it just now, as everything clicked together. It's fun, new, and innovative. I can also add a timer so that people need to move fast (and hopefully miss out on any bugs that might exist hehe). The question now is what features there should be and how I can make it work. Last time, all I needed was one button. But this time, I'm thinking of using almost all of the sensors that I have. This is gonna be a tough one. Will I have enough time? If not, I can just stick with the vault by itself (meaning I'll work on that first, then go to the others if I have time). Yeah, it works. Eskettit (let's get it).
+
+![](journal_sketch1.jpg)
