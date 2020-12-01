@@ -29,3 +29,12 @@ Speaking of timers... Not a lot of time left until I need to start working on th
 A bank heist. That's what I can make. Thought of it just now, as everything clicked together. It's fun, new, and innovative. I can also add a timer so that people need to move fast (and hopefully miss out on any bugs that might exist hehe). The question now is what features there should be and how I can make it work. Last time, all I needed was one button. But this time, I'm thinking of using almost all of the sensors that I have. This is gonna be a tough one. Will I have enough time? If not, I can just stick with the vault by itself (meaning I'll work on that first, then go to the others if I have time). Yeah, it works. Eskettit (let's get it).
 
 ![](journal_sketch1.jpg)
+
+#### Day 6 (11/28)
+
+Thought of some new stage possibilities, as well as a sort-of storyline. Thinking of making the game something of a VN (virtual novel; these are common in Japan and are basically stories where you choose your path) with characters and narrations. Maybe for the instruction section, it can be like a heist rehersal where you learn the basics of all the sensors and how to use them. The game itself will be a lot harder, of course, so the instruction will be more of a tutorial. I think I'll call it "Rehersal" instead of "Instructions" to make it seem more realistic (haha). This section will allow the player to get used to the various sensors in the game. In addition, I think I'll make the game a sort of DIY breadboard. This will make it harder for the player (they need to select the right tool and place it in the right place), and it'll also save space on the board for me (hehe).
+
+Started on the basic classes, but ran into issues right away regarding how I'm going to be categorizing these things. I think I might have a separate class called "Lock" and "Stage". Locks will consist of an array of integers (the code, which can be assigned using the random function; the parameters of the function will be set in the constructor, as well as the number of digits in the passcode) and have a method of checking a specific index with a number. Getting it wrong will reset the stage (or end the game, depending on the stage itself). Stages will have locks
+
+#### Day 7 (11/30)
+
