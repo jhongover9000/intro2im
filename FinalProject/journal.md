@@ -1,6 +1,6 @@
 ### The Journ(ey)al
 
-[Day 1](journal.md#day-1); [Day 2](journal.md#day-2); [Day 3](journal.md#day-3); [Day 4](journal.md#day-4); [Day 5](journal.md#day-5); [Day 6](journal.md#day-6)
+[Day 1](journal.md#day-1); [Day 2](journal.md#day-2); [Day 3](journal.md#day-3); [Day 4](journal.md#day-4); [Day 5](journal.md#day-5); [Day 6](journal.md#day-6); [Day 7](journal.md#day-7); [Day 8](journal.md#day-8)
 
 #### Day 1 (11/11)
 
@@ -34,7 +34,69 @@ A bank heist. That's what I can make. Thought of it just now, as everything clic
 
 Thought of some new stage possibilities, as well as a sort-of storyline. Thinking of making the game something of a VN (virtual novel; these are common in Japan and are basically stories where you choose your path) with characters and narrations. Maybe for the instruction section, it can be like a heist rehersal where you learn the basics of all the sensors and how to use them. The game itself will be a lot harder, of course, so the instruction will be more of a tutorial. I think I'll call it "Rehersal" instead of "Instructions" to make it seem more realistic (haha). This section will allow the player to get used to the various sensors in the game. In addition, I think I'll make the game a sort of DIY breadboard. This will make it harder for the player (they need to select the right tool and place it in the right place), and it'll also save space on the board for me (hehe).
 
-Started on the basic classes, but ran into issues right away regarding how I'm going to be categorizing these things. I think I might have a separate class called "Lock" and "Stage". Locks will consist of an array of integers (the code, which can be assigned using the random function; the parameters of the function will be set in the constructor, as well as the number of digits in the passcode) and have a method of checking a specific index with a number. Getting it wrong will reset the stage (or end the game, depending on the stage itself). Stages will have locks
+Started on the basic classes, but ran into issues right away regarding how I'm going to be categorizing these things. I think I might have a separate class called "Lock" and "Stage". Locks will consist of an array of integers (the code, which can be assigned using the random function; the parameters of the function will be set in the constructor, as well as the number of digits in the passcode) and have a method of checking a specific index with a number. Getting it wrong will reset the stage (or end the game, depending on the stage itself). Stages will have locks and other information, depending on what tool (sensor) is needed.
 
 #### Day 7 (11/30)
+
+Drew out a storyboard of sorts for a guide for me to use. This actually took a lot longer than I expected, as I needed to come up with ideas and think of what sensors or parts of the breadboard I could use.
+
+![](journal_sketch2.jpg)
+
+As you can probably see, I marked almost all of the stages as optional. The reason behind this is because I actually started the coding process for locks, dials, and water cups. With the time that I have, and the work that I need to complete aside from IM, I need to think realistically. I plan on finishing the vault stage first, then see how much time I have before implementing everything else. Thinking about how I'm making this into a VN of sorts means that there's another layer of added complexity with character dialogues and looking for images that I can use (I think I know what I'll use, though; I have assets from a mobile game called SAO Memory Defrag, planning on using the toughest looking guys there).
+
+The Lock class is a bit more complicated than I thought, especially when it comes to the dial locks. They're combinations, but the thing is that because the potentiometer isn't a free-spin sensor, I need to code it so that whenever a digit is matched, the player needs to turn the potentiometer in the opposite direction in order to get to the next number. This is the code:
+
+    //set initial value (first digit)
+          int val1 = (int)random(startNum,endNum);
+          passcode.add(startVal);
+          //when a value is selected, this becomes the endpoint value for the next number
+          //this forces a player to turn right, then left, then right... (like a lock dial)
+          for (int i = 0; i < length-1; i += 2) {
+            int val2 = (int)random(startNum,val1);
+            passcode.add(val2);
+            val1 = (int)random(val2,endNum);
+            passcode.add(val3);
+          }
+
+I don't know if I can refine this further, but what I need to do now is either ensure that the passcode of the dial locks will always be odd in length or use the .remove() function to match the size of the array to the length of the passcode.
+
+#### Day 8 (12/1)
+
+Finished the water cup coding. It was actually rather simple, and it's kind of addicting to play with. I'm talking about how it ripples. It uses an arc whose height increases but only has half of it drawn, giving the illusion that the surface of the water is dipping down. Here's the code:
+
+    //Ripple effect (just a dip in the water, nothing complicated)
+        void ripple(){
+            if(frameCounter <= 5){
+                rippleDepth = frameCounter;
+            }
+            else if(frameCounter > 5){
+                rippleDepth = 10 - frameCounter;
+            }
+            arc(locX, locY, 110, rippleDepth, 0, PI);
+            frameCounter++;
+            if(frameCounter >= 10){
+              frameCounter = 0;
+                isRippling = false;
+            }
+        }
+
+    //Display
+    void display(){
+        //base of cup
+        line(locX - 50, locY + 50, locX + 50, locY + 50);
+        //sides
+        line(locX - 50, locY + 50, locX - 60, locY - 50);
+        line(locX + 50, locY + 50, locX + 60, locY -50);
+        //water
+        if(!isRippling){
+            noFill();
+            line(locX - 55, locY, locX + 55, locY);
+        }
+        else{
+            ripple();
+        }
+    }
+
+I linked the rippling to a mouse click and spent a few minutes clicking. It's rather addicting and soothing. In any case, I didn't actually finish the Lock class because I'm not really sure what I need in terms of data members. I started on the Dial class, but I also hit a sort-of wall thinking about the methods that I need for the class–– especially because I'm trying to make the lock reset if the player overturns (turns too much past) the digit. I'm thinking of making them have to reset by turning the dial to 0 again and then starting over. I remember how the potentiometer sometimes gives random values, so I need to make sure that a jump will not be counted as an overturn. Maybe I'll use a function that checks how far away from the previous value the current value is. Since it's unlikely that someone will be able to turn the potentiometer fast enough (or will *want* to; remember that this is a vault dial), if I make sure it's within 10-20 of the past value it should be enough, since I'm going to divide the potentiometer into 100 numbers (divide by 100 so that every 10 values is one number and the last is 14 in size). I also need to make the dial *spin*, so that means I'll have to use the rotation() function, too. Wow, this thing just keeps on getting more and more complicated. Well, off to work.
+
 
