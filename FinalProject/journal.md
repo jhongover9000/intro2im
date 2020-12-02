@@ -1,6 +1,6 @@
 ### The Journ(ey)al
 
-[Day 1](journal.md#day-1); [Day 2](journal.md#day-2); [Day 3](journal.md#day-3); [Day 4](journal.md#day-4); [Day 5](journal.md#day-5); [Day 6](journal.md#day-6); [Day 7](journal.md#day-7); [Day 8](journal.md#day-8)
+[Day 1](journal.md#day-1); [Day 2](journal.md#day-2); [Day 3](journal.md#day-3); [Day 4](journal.md#day-4); [Day 5](journal.md#day-5); [Day 6](journal.md#day-6); [Day 7](journal.md#day-7); [Day 8](journal.md#day-8); [Day 9](journal.md#day-9)
 
 #### Day 1 (11/11)
 
@@ -46,7 +46,7 @@ As you can probably see, I marked almost all of the stages as optional. The reas
 
 The Lock class is a bit more complicated than I thought, especially when it comes to the dial locks. They're combinations, but the thing is that because the potentiometer isn't a free-spin sensor, I need to code it so that whenever a digit is matched, the player needs to turn the potentiometer in the opposite direction in order to get to the next number. This is the code:
 
-    //set initial value (first digit)
+          //set initial value (first digit)
           int val1 = (int)random(startNum,endNum);
           passcode.add(startVal);
           //when a value is selected, this becomes the endpoint value for the next number
@@ -64,7 +64,7 @@ I don't know if I can refine this further, but what I need to do now is either e
 
 Finished the water cup coding. It was actually rather simple, and it's kind of addicting to play with. I'm talking about how it ripples. It uses an arc whose height increases but only has half of it drawn, giving the illusion that the surface of the water is dipping down. Here's the code:
 
-    //Ripple effect (just a dip in the water, nothing complicated)
+        //Ripple effect (just a dip in the water, nothing complicated)
         void ripple(){
             if(frameCounter <= 5){
                 rippleDepth = frameCounter;
@@ -103,7 +103,7 @@ I linked the rippling to a mouse click and spent a few minutes clicking. It's ra
 
 Okay, so I looked over the Lock coding for the dial and realized I could make the system work by checking whether i is even or not; if it's even, that means that I perform the (int)random(startNum,val1), but make it so that val1 is actually a reference that points to the index before i (so basically using .get(i-1) ). This means that i will start at 1 rather than 0. This is the result:
 
-    for (int i = 1; i < length; i++) {
+                for (int i = 1; i < length; i++) {
                     int temp;
                     //if even, (int)random(startNum,passcode.get(i-1))
                     if(i%2 ==0){
