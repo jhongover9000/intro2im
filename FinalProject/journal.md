@@ -99,4 +99,22 @@ Finished the water cup coding. It was actually rather simple, and it's kind of a
 
 I linked the rippling to a mouse click and spent a few minutes clicking. It's rather addicting and soothing. In any case, I didn't actually finish the Lock class because I'm not really sure what I need in terms of data members. I started on the Dial class, but I also hit a sort-of wall thinking about the methods that I need for the class–– especially because I'm trying to make the lock reset if the player overturns (turns too much past) the digit. I'm thinking of making them have to reset by turning the dial to 0 again and then starting over. I remember how the potentiometer sometimes gives random values, so I need to make sure that a jump will not be counted as an overturn. Maybe I'll use a function that checks how far away from the previous value the current value is. Since it's unlikely that someone will be able to turn the potentiometer fast enough (or will *want* to; remember that this is a vault dial), if I make sure it's within 10-20 of the past value it should be enough, since I'm going to divide the potentiometer into 100 numbers (divide by 100 so that every 10 values is one number and the last is 14 in size). I also need to make the dial *spin*, so that means I'll have to use the rotation() function, too. Wow, this thing just keeps on getting more and more complicated. Well, off to work.
 
+#### Day 9 (12/2)
 
+Okay, so I looked over the Lock coding for the dial and realized I could make the system work by checking whether i is even or not; if it's even, that means that I perform the (int)random(startNum,val1), but make it so that val1 is actually a reference that points to the index before i (so basically using .get(i-1) ). This means that i will start at 1 rather than 0. This is the result:
+
+    for (int i = 1; i < length; i++) {
+                    int temp;
+                    //if even, (int)random(startNum,passcode.get(i-1))
+                    if(i%2 ==0){
+                        temp = (int)random(startNum,passcode.get(i-1));
+                        passcode.add(temp);
+                    }
+                    //if odd, (int)random(val2,endNum)
+                    else if(i%2 == 1){
+                        temp = (int)random(passcode.get(i-1),endNum);
+                        passcode.add(temp);
+                    }
+                }
+
+While making the circuit (still haven't actually decided how to do that either), I ended up removing a button so I'm only using 3. Makes the game easier, but also leaves room for more wires. What I'm worried about is the analog. I've created a sort-of workaround by making it so the player needs to plug in the right wire before starting the stage. This may be quite complicated, but it's fun to do nonetheless. Will work more tomorrow; I had an assignment due today so I worked on that most of the day.
