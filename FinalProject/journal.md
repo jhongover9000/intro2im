@@ -105,16 +105,49 @@ Okay, so I looked over the Lock coding for the dial and realized I could make th
 
                 for (int i = 1; i < length; i++) {
                     int temp;
-                    //if even, (int)random(startNum,passcode.get(i-1))
-                    if(i%2 ==0){
+                    //if i is odd, (int)random(startNum,passcode.get(i-1))
+                    if(i%2 == 1){
                         temp = (int)random(startNum,passcode.get(i-1));
                         passcode.add(temp);
                     }
-                    //if odd, (int)random(val2,endNum)
-                    else if(i%2 == 1){
+                    //if i is even, (int)random(val2,endNum)
+                    else if(i%2 == 0){
                         temp = (int)random(passcode.get(i-1),endNum);
                         passcode.add(temp);
                     }
                 }
 
 While making the circuit (still haven't actually decided how to do that either), I ended up removing a button so I'm only using 3. Makes the game easier, but also leaves room for more wires. What I'm worried about is the analog. I've created a sort-of workaround by making it so the player needs to plug in the right wire before starting the stage. This may be quite complicated, but it's fun to do nonetheless. Will work more tomorrow; I had an assignment due today so I worked on that most of the day.
+
+#### Day 10 (12/4)
+
+I've mostly been focused on assignments from other classes because they're more imminent (as in they've been due every day and I'll have an assignment due every day from today onwards), but I've also been thinking about how I can make the game work in the process. I also worked on the dial, thinking about how I could make the potentiometer value work as the dial for the combination lock. What I came up with was a system that basically checks the value of the potPosition and compares it to the digit in the passcode. This, however, only works when the potentiometer value isn't fluctuating wildly; this is supposed to prevent the random surges in values from messing up the process. I'm not fully sure if it'll work or not, but this is the code. I haven't gotten to adding sound files, so those lines of code are empty.
+
+    void update(int potPosition) {
+          //for the case that a spike value appears (more than +-10 the past value), the value is ignored
+          if ((lock.isFresh && potPosition == 0) || 
+                    (potPositionPast - 10 <= potPosition && potPosition <= potPositionPast + 10)) {
+                    //if the lock digit is correct, then the lock will move on to the next digit automatically.
+                    if (lock.checkInput(potPosition)) {
+                              //make sound
+                              //dialClick.play();
+                              //upon matching the digit, the dial checks if the entire passcode has been matched
+                              if (checkLock()) {
+                                        //make fully unlocked sound and set isUnlocked as true
+                                        //dialUnlock.play();
+                                        isUnlocked = true;
+                              }
+                    }
+          }
+
+There's obviously a lot more work to be done, and I'm starting to think that I might only be able to get the dial done for the game, along with the story. At this point I don't have any clue as to whether I'm going to be making my own assets for the bank and vault (I might have to), but in the case that I do that means I'll have even less time to get the code to work.
+
+I also worked on the serialEvent, but I'm wondering what kind of communication the program and Arduino should be having. Should it be the stage, any values that need to be added, then whether the stage is complete? What will the Arudino send back? Which values, and how? These are just some of the issues that I'm running into. Maybe I should've stuck with a game that I knew how to make. This is unexplored space for me and I don't think that was a great idea with all the work that I have. Wait, why do I get a feeling of *deja vu*? Ah, right. This exact thing pretty much happened with my midterm project. Why do I do this to myself?
+
+#### Day 11 (12/5)
+
+So funny thing. I realized that my logic behind having multiple analog wires was kind of flawed. I didn't think about how values would fluctuate when they were left out, so I might have to keep the wires in at all times and cut the count to one wire for the dials, using the buttons to change between locks.
+
+I also got an idea regarding how I can achieve what I want, which is having the player alternate between locks with ever single number. I had given up on the idea and was going to make it so you needed to complete one lock at a time, but I realized I could use something similar to a save state for each lock. Each time a lock is called, it is activated. Once the player reaches the saved number (that is, the digit that was matched correctly before the switch in dials was called), then the dial begins moving along with the potentiometer. I think I can have to dials, one overlapping the other using a lower opactity, to show the player's current potentiometer position. This makes it challenging because the player needs to keep track of which direction they were turning the dial in because one you're at the number, you need to turn it in the opposite direction.
+
+This is super complicated, but if I'm cutting down on content I should at least make the remaining content better... right? I still don't actually know about what I can do for the story, though...
