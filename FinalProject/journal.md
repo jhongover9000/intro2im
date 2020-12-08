@@ -267,3 +267,49 @@ Today, I'm going to make sure that this vault stage works, then start working on
 So... the vault stage isn't working as smoothly as I wanted. Need to work on it. The pan() is sometimes coming from both ears when playing the sound for the next dial, which is not good because it's supposed to be the indicator for the next dial. I don't know what's wrong, and there isn't much about panning on the internet–– at least not about Processing, anyway. So. Looks like I'm going to be messing around till this works... In the meantime I'll also try to get the Arduino to read multiple inputs (err strings) as well.
 
 Fixed the pan() issue; it was actually because I had added another block of code that had a pan() of the current dial (not the next one) and this was causing the audio to play from both ears. Now I'm trying to keep the program from bailing on me when the dials are completed. The update just stops and I can't end the stage. Have to fix that.
+
+HA! I FOUND IT! (at least I think i did)
+
+Okay. So remember how I had that code for dialAssign()? Well, if you look closely, there's a while loop.
+
+          while (dials.get(choice).isUnlocked == true) {
+                choice = (int)random(0, 3);
+              }
+
+What the problem was that, once all of the dials have been completed, it falls into an infinite loop. That's why the program was seemingly bailing on me. It's not that it hates me, which is a relief :) This function was in front of the checker, which was what the problem was. I'm going move the checker *into* the assign function. Here it is now:
+
+            //Dial Assign (Program)
+            void dialAssign() {
+              unassignAll();
+              int choice = 0;
+              //select a random dial as long as it is not unlocked and there are locked dials remaining
+              choice = (int)random(0, 3);
+              if(checkCompleteAll()){
+                //play sound of unlock complete
+                muteSounds(vaultDialSounds);
+                dialClack.play();
+                dialClack.amp(1);
+                dialClack.pan(0);
+                
+                //set as stage complete
+                isComplete = true;
+              }
+              else{
+              while (dials.get(choice).isUnlocked == true) {
+                choice = (int)random(0, 3);
+              }
+              println("assinging " + choice);
+              assignedDial = choice;
+
+              //assign dial
+              dials.get(assignedDial).isAssigned = true;
+
+              //make sound; pan according to which dial it is
+              if (dialTick.isPlaying()) {
+                dialTick.stop();
+              }
+              dialClick.play();
+              dialClick.amp(1);
+              dialClick.pan(choice-1.0);
+              }
+            }
