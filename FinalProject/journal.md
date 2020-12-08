@@ -1,6 +1,6 @@
 ### The Journ(ey)al
 
-[Day 1](journal.md#day-1); [Day 2](journal.md#day-2); [Day 3](journal.md#day-3); [Day 4](journal.md#day-4); [Day 5](journal.md#day-5); [Day 6](journal.md#day-6); [Day 7](journal.md#day-7); [Day 8](journal.md#day-8); [Day 9](journal.md#day-9)
+[Day 1](journal.md#day-1); [Day 2](journal.md#day-2); [Day 3](journal.md#day-3); [Day 4](journal.md#day-4); [Day 5](journal.md#day-5); [Day 6](journal.md#day-6); [Day 7](journal.md#day-7); [Day 8](journal.md#day-8); [Day 9](journal.md#day-9); [Day 10](journal.md#day-10); [Day 11](journal.md#day-11); [Day 12](journal.md#day-12); [Day 13](journal.md#day-13)
 
 #### Day 1 (11/11)
 
@@ -263,3 +263,5 @@ There's a lot, and I mean a *lot* more stuff that I did, but I'm kinda tired of 
 #### Day 14 (12/8)
 
 Today, I'm going to make sure that this vault stage works, then start working on the drill & doorlock stages. The idea is to use the sonar to move the drill and make a fun little game where you need to memorize a pattern and use it to write out a keycode. I'm going to make life as miserable for the player as this program made mine. Call it empathy.
+
+So... the vault stage isn't working as smoothly as I wanted. Need to work on it. The pan() is sometimes coming from both ears when playing the sound for the next dial, which is not good because it's supposed to be the indicator for the next dial. I don't know what's wrong, and there isn't much about panning on the internet–– at least not about Processing, anyway. So. Looks like I'm going to be messing around till this works... In the meantime I'll also try to get the Arduino to read multiple inputs (err strings) as well.
