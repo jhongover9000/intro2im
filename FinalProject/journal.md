@@ -157,3 +157,109 @@ This is super complicated, but if I'm cutting down on content I should at least 
 In the process of implementing the ghost dial system (whoa that actually sounds k i n d a   c o o l ). I'm teetering between using the potPast value or just creating a new variable called lockDigitPast that stores the actual *digit* of the last number, rather than the potentiometer value for it. Also, I decided to use the map() function instead of using the system that I had with dividing the potentiometer value with the segment size in order to get the dial digit. I don't understand how I didn't actually see that until just recently... Anyway, I also started on the display function for the dials, making it so that the real dial will always be displayed (updated using the variable lockDigitPast) and the ghost dial will be over the real one (need to find how to make images translucent again; I think it was by adding a fifth value but I'll have to double check.
 
 Also, something that struck me while I was struggling to come up with the finer details of the dials today was that if I spent that time working on something else–– that is, more features ––I might be able to use my time more efficiently. Not that much help considering I realized this two days before the due date, but I think I might try it tomorrow. Taking a break from this code and working on something else will hopefully give me more ideas to work with.
+
+#### Day 13 (12/7)
+
+So... my computer crashed yesterday. All the stuff that I wrote for then and everything I worked on was wiped out without a trace. I should've committed. I've been writing up for days at a time and uploading all at once, but this.. *fun* experience has taught me a) my computer is failing so I need to buy a new one and b) I need to regularly update by repository so that everything is stored online.
+
+Okay, so what *did* I do today? Well, a *lot*. I started the debugging and it took me a good ol' 12 hours to finally get the stupid thing to work. First off, I made a method in the dial class called autoCrack. As the name implies, it's meant to automatically crack the dials. This works well when there's one lock, but not as much when there are multiple alternating between each other. Here's the code for it:
+
+            //AutoCracker (tester)
+            void autoCrack() {
+              //print(lockDigitPast + ":" +num);
+              println(num);
+
+              isSelected = true;
+
+              //while inactive, gets to the right number to activate lock
+              if (!isActive && lockDigit != lockDigitPast) {
+                if (lockDigit > lockDigitPast) {
+                  num--;
+                } else if (lockDigit < lockDigitPast) {
+                  num++;
+                }
+              }
+              //once active, solves for digit
+              else if (isActive && lock.iter < 10) {
+                if (lockDigit != lock.passcode.get(lock.iter)) {
+                  if (lock.iter % 2 == 0) {
+                    num++;
+                  } else {
+                    num--;
+                  }
+                } else {
+                  println("match : " + lockDigit + " iter : " + lock.iter);
+                }
+              }
+            }
+
+This, when I'm running it on the vault stage, is meant to go hand in hand with the autoSelect() function, which automatically selects whichever dial is assigned and performs the crack on it. I've had a bit of trouble getting it to work properly, but it did (for a while anyway) and it was enough, since I'm not trying to make the game automated.
+
+After that was getting the Arduino and Processing to communicate. I decided to start with the buttons and potentiometer, so that I select which dial to select and turn the dial. **It was a nightmare**. I spent hours trying to get the thing to work because it wouldn't. Read. The. Serial. Properly. I looked up everything I could find and still failed. Hours and hours of work went into trying to make the two things communicate (and a lot of screaming and punching in frustration) before I defaulted to using one of the Arduino examples online (and that worked, which didn't make sense because that was *exactly* what I'd been doing. Anyway, I have a gist of how the communication works now, so once I clean up the dial stage I can start working on the others. I think I might save the story for last, because that's technically one of the least important features in the game. But whether or not I'll actually be able to get the stages done, well, that's a different story. I thought that I'd be finished with debugging the stage in three, maybe four hours, tops. Instead I spent the entire day (and I mean the *entire* day) trying to get the stage to work properly. The communication bit was the most frustrating and the alternation between dials took the longest.
+
+Speaking of that, here's the code that alternates between locks when they're completed.
+
+            //Dial Select (Player)
+            void dialSelect(int buttonPressed) {
+              deselectAll();
+              selectedDial = buttonPressed;
+              dials.get(buttonPressed).isSelected = true;
+            }
+
+            //Dial Assign (Program)
+            void dialAssign() {
+              unassignAll();
+              int choice = 0;
+              //select a random dial as long as it is not unlocked (choose from remaining dials)
+              choice = (int)random(0, 3);
+              while (dials.get(choice).isUnlocked == true) {
+                choice = (int)random(0, 3);
+              }
+              println("assinging " + choice);
+              assignedDial = choice;
+
+              //make sound; pan according to which dial it is to hint which is the next
+              if(dialTick.isPlaying()){
+                dialTick.stop();
+              }
+              dialClick.play();
+              dialClick.amp(1);
+              dialClick.pan(assignedDial-1.0);
+
+              //assign dial
+              dials.get(assignedDial).isAssigned = true;
+
+            }
+
+            //Deselect All Dials
+            void deselectAll() {
+              for (Dial d : dials) {
+                d.isSelected = false;
+              }
+            }
+
+            //Unassign All Dials
+            void unassignAll() {
+              for (Dial d : dials) {
+                d.isAssigned = false;
+              }
+            }
+            
+There are two parts to this code, the unassignAll() and the dialAssign(). Basically, the dials have a lot of boolean values that indicate whether they're assigned (the right one to work on), selected (player is actually working on them), and active (the dial is being turned). The dialAssign() is what sets a dial as assigned by the program, while the dialSelect() is what sets the dial as selected by the player. This method allows the player to interact with the program and learn what to do vs what not to do.
+
+Oh! Something fun! I added the timer feature, like I said I would, but I also realized that I could do something with that. Normally, when the player messed up I would have the game end automatically and have the cops come in, but I thought there was something unfair about that. So, I decided that whenever the player is doing something wrong, the timer will speed up. Once the remaining time reaches 0, that's when the cops will come in. I'm thinking 5 minutes for now, but I might make it 7 or 10 depending on how long it takes for me to finish the actual game. The timer is set at the beginning as milliseconds (300,000 for 5 minutes) and is updated in the draw() section:
+
+            int passedTime = millis();
+            int subtract = passedTime - savedTime;
+            timeRemaining -= subtract;
+            savedTime = passedTime;
+
+The savedTime variable is the millis() at the start of the program, but it's constantly updated throughout the game so that it acts as the timer. Anyway, what happens is that each time the player makes a mistake, the reduceTime() function is called. It's very cut and dry, performing remainingTime -= 100. I might increase or decrease this amount depending on how hard this is (or might make it a difficulty option...?).
+
+Oh, another thing I added was the pan() function for the ticking of the dials. This is meant to help the player differentiate what dial is assigned–– which means headphones are supported (if not recommended). It was quite the experience, maybe 2 hours trying to get the audio to work properly. At one point I gave up on Sound and tried converting to Minim, but realized that I had no idea how to use Minim so went back to Sound. Life is fun. Also, make sure you don't use any headphones that support noise cancelling. You have no idea how long I thought the pan() was broken before realizing that the Processing automatically sets the device into input mode, which is why any sounds made come from both sides. Using OG, old earbuds work, though. Also, had a bit of trouble trying to get the audio files into MONO. Had to download a whole other application and split the audio. Fun times.
+
+There's a lot, and I mean a *lot* more stuff that I did, but I'm kinda tired of writing stuff I wrote THAT GOT DELETED all over again. So, onto today.
+
+#### Day 14 (12/8)
+
+Today, I'm going to make sure that this vault stage works, then start working on the drill & doorlock stages. The idea is to use the sonar to move the drill and make a fun little game where you need to memorize a pattern and use it to write out a keycode. I'm going to make life as miserable for the player as this program made mine. Call it empathy.
