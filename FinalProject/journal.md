@@ -338,3 +338,4 @@ So, while trying to figure out the cause of the problem, I learned that it was a
 
 Update: I come bearing good news. I can do more stages (if I can code them in time). Basically, I had a problem where no matter what I did for making different stages on Arduino, it would only return the values of the first block of instructions. I found out that the problem was in my if statement. I made the stupidest mistake ever. I did "=" instead of "==". I just wasted a full hour and a half trying to make a code work when it was already working from the start. What am I doing with my life?
 
+I uploaded what I have so far because I don't want to go through the whole crash-and-everything-gets-deleted thing again.
