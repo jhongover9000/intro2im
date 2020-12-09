@@ -313,3 +313,28 @@ What the problem was that, once all of the dials have been completed, it falls i
               dialClick.pan(choice-1.0);
               }
             }
+
+#### Day 15 (12/9)
+
+Worked more on the communication side of the project and came across an unexpected problem: my computer can't handle everything going on at once. I don't want lag. That kills the experience. I think this is kind of forcing me to cut down the game to just the vault dials. I can add a separate stage for the keypad on the door lock, but I don't think I can put them in the same file or else the lag will get too bad. Also, something cool is the way that I got the Arudino to take String inputs from Serial.
+
+    char readData[10] = "0000000000";
+    // get incoming byte:
+    inByte = Serial.readBytesUntil('\n', readData, 10);
+
+    //change the received information into a string
+    String input = "";
+    int index = 0;
+    while (readData[index] != '0') {
+      input += readData[index];
+      index++;
+    }
+
+This is the exerpt. Bascially, I used the readBytesUntil() in order to add all of the characters into an array, then made it into a string. This was so that I could have multiple types of stages, but seeing how things are with my computer crashing twice and lagging real bad (the fan is lifting off too), I don't know if I'll be able to do it.
+
+But I've done a lot of things since yesterday. I started the keypad stage, where you need to find the right combination for a lock on a door. This would be through a form of a light game where you need to match the patterns. Here, the lights would indicate rows and columns which correspond to what's on the screen (a 9-digit keypad). You press the buttons and submit, and if it's right the door opens! This is really cool so I'm going to try to finish this, even if I can't put the two stages together because ~~my computer sucks~~ there's too much lag and that kills the experience.
+
+So, while trying to figure out the cause of the problem, I learned that it was actually my ingenious string input creater on Arduino that was causing the issues. It was because of the readBytesUntil() function. Apparently that was what was causing the delay between Arduino and Processing. Which means... I don't actually know what that means. I'm not sure how the programs are going to communicate more than a single stage if this is what's happening.
+
+Update: I come bearing good news. I can do more stages (if I can code them in time). Basically, I had a problem where no matter what I did for making different stages on Arduino, it would only return the values of the first block of instructions. I found out that the problem was in my if statement. I made the stupidest mistake ever. I did "=" instead of "==". I just wasted a full hour and a half trying to make a code work when it was already working from the start. What am I doing with my life?
+
