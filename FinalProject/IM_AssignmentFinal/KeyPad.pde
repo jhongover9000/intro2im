@@ -90,12 +90,12 @@ class KeyPad {
         break;
       }
     }
-    print("passcode: ");
-    i = 0;
-    for (; i < lock.passcode.size() - 1; i++) {
-      print(lock.passcode.get(i) + ",");
-    }
-    println(lock.passcode.get(i));
+    //print("passcode: ");
+    //i = 0;
+    //for (; i < lock.passcode.size() - 1; i++) {
+    //  print(lock.passcode.get(i) + ",");
+    //}
+    //println(lock.passcode.get(i));
   }
 
   //Check Inputs
@@ -147,7 +147,7 @@ class KeyPad {
             isComplete = true;
           } else {
             //clear answer and reduce time
-            println("wrong answer!");
+            //println("wrong answer!");
             wrongAnswer = true;
             reduceTime(100*timeReducer);
           }

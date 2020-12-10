@@ -107,8 +107,8 @@ class Dial {
     //while locked, player can move dial
     if (!isUnlocked) {
       //Tester
-      println("isSelected:" + isSelected + "isAssigned:" + isAssigned +"  isActive:"+isActive+"  isUnlocked:"+isUnlocked+"  lockdigit:"+lockDigit+
-        "  passcodeDigit:"+lock.passcode.get(lock.iter) + "  iter:" + lock.iter +"  checkIter:"+lock.checkInput(lockDigit));
+      //println("isSelected:" + isSelected + "isAssigned:" + isAssigned +"  isActive:"+isActive+"  isUnlocked:"+isUnlocked+"  lockdigit:"+lockDigit+
+      //  "  passcodeDigit:"+lock.passcode.get(lock.iter) + "  iter:" + lock.iter +"  checkIter:"+lock.checkInput(lockDigit));
 
       //if dial has been selected (when you press a different button it deselects)
       if (isSelected) {

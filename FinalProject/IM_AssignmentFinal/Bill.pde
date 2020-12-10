@@ -36,7 +36,7 @@ class Bill {
 
     //if out of screen, then make it appear again
     if (locY >= screenHeight || locY <= 0) {
-      locY = locY - imgHeight;
+      locY = -imgHeight;
     } else if (locX >= screenWidth || locX <= 0) {
       locY = screenHeight - locY;
       if (velX > 0) {
