@@ -54,7 +54,7 @@ boolean buttonPushed;                    //if button is being held down
 int potPosition;                         //potentiometer
 
 //Game game = new Game();
-int dialLength = 2;
+int dialLength = 10;
 int[] keyPadInput;
 int keyPadLength = 8;
 
@@ -214,7 +214,7 @@ void draw() {
       normalTime -= subtract;
       timeRemaining -= subtract;
       savedTime = passedTime;
-      println(normalTime + ":" + timeRemaining);
+      //println(normalTime + ":" + timeRemaining);
       displayTime(timeRemaining, normalTime);
     }
   }
@@ -260,7 +260,11 @@ void serialEvent(Serial myPort) {
       //game.practiceDial.update(potPosition);
     }
   }
-  myPort.write(game.gameState);
+  if ((game.gameState == 7 || game.gameState == 8) && game.newStage) {
+    myPort.write(12);
+  } else {
+    myPort.write(game.gameState);
+  }
 }
 
 void mousePressed() {
@@ -284,7 +288,7 @@ void keyReleased() {
   //SPACE -- RESET GAME
   if (keyCode == 32) {
     //Reset Game
-    if (game.gameState == 1 || game.gameState == 7 || game.gameState == 8) {
+    if (game.gameState == 1 || game.gameState == 4 || game.gameState == 7 || game.gameState == 8) {
       screenWidth = 896;
       screenHeight = 504;
       game = new Game();
