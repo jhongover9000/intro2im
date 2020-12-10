@@ -341,3 +341,104 @@ Update: I come bearing good news. I can do more stages (if I can code them in ti
 I uploaded what I have so far because I don't want to go through the whole crash-and-everything-gets-deleted thing again.
 
 So... I messed something up and now nothing works anymore. It sucks because everything was working just fine. Now my Arduino just shuts off when I try to connect it. Dunno if it's because I'm trying to make it do too much work but it's really frustrating.
+
+#### Day 16 (12/10)
+
+Alright, so a lot happened in between yesterday and today, so I decided to just write it all down so I wouldn't forget. So, first off, those practice stages didn't work because Arduino doesn't like me. It's really weird because it works when there are two stages but any more than that and it bails on me. I've been looking around on why this is happening, and as far as I can tell it's not an error on Processing, since it keeps displaying what it needs to. All that happens is Arduino stops its loop(); the TX and RX lights turn off. It doesn't even send any bits to Processing. It just dies on the spot.
+
+Because of that, I ended up having to just write out the instructions. Also, I didn't finish the drill stage because I spent so much time trying to debug the program. In a sense, the game still works so that's alright. I just left some of the code inside of the files just in case I want to come back to this later on (I probably will). In any case, I finished the KeyPad class, which was a stage in itself that consisted of a Lock and multiple Keys. I decided to create individual objects for the keys of the keypad because it was a lot easier if I just went through all of them in a loop, rather than trying to calculate the location of each and every key based on the initial location of the KeyPad object.
+
+Something fun is the matrix that I created in order to make the passcode. What happens in the KeyPad stage is that you need to complete a pattern game that has a total of 16 lights, incrementing by 2 every time. After that (you can't input untill you've gone through the entire pattern, something to make it a bit more challenging–– unless you write down all the digits of course), you need to take those lights and figure out what the pattern is. The idea was to make it into a matrix, where the first of the two lights (there are two each phase in the game) represents the index of the row, and the second the column. With that, you can match the passcode's 8 digits. Implementing this was kind of a pain and I had to constantly write and delete lines so that it would send the right data.
+
+Here's the code where I take the values from Arduino and convert it into the matrix:
+
+              //make the matrix of 1-9 (3x3)
+              int num = 1;
+              for (int i = 0; i < 3; i++) {
+                ArrayList<Integer> temp = new ArrayList<Integer>();
+                numMatrix.add(temp);
+                for (int j = 0; j < 3; j ++) {
+                  numMatrix.get(i).add(num);
+                  num++;
+                }
+              }
+              
+            //Get passcoords with Serial Input
+            void getPassCoords(int[] inputs) {
+              //println("clearing");
+              passcodeCoords.clear();
+              //populates the passcodecoords array with input from Serial
+              for (int i : inputs) {
+                passcodeCoords.add(i);
+              }
+            }
+
+            void createPasscode() {
+              //creates passcode using the pairs of numbers (increments by 2)
+              int j = 0;
+              int i = 0;
+              while (i <= 15) {
+                //print("passcode: ");
+                int row = passcodeCoords.get(i);
+                //print("row:" + row);
+                i++;
+                int col = passcodeCoords.get(i);
+                //print(" col:" + col);
+                i++;
+                int digit = numMatrix.get(row).get(col);
+                //println(" num:" + digit);
+                lock.passcode.set(j, digit);
+                j++;
+                if (j == passcodeLen) {
+                  break;
+                }
+              }
+            }
+
+You can see that I actually have two checkers for the createPasscode() function, and that's because I was really, *reall* paranoid about it because sometimes it would mess up and cause an error (I don't know why it was only sometimes, but it worked after I buffed it out with checkers). Anyway, this was a system that I thought was really cool. Initially, the drill stage was supposed to be you drilling the holes that the wires are in, but I didn't have enough time for that so I let it go. Might add it sometime, though!
+
+I never really mentioned anything about the Game class, and that's because it's sort of a copy of my midterm Game class, with just a few things changed here and there. All of the stages follow a similar style of code to this:
+
+          //Keypad Stage
+    else if (gameState == 5) {
+      if (newStage) {
+        if (newStageCounter < 200) {
+          background(0);
+          fill(255);
+          textSize(32);
+          textAlign(CENTER, CENTER);
+          text("CHAPTER 1: THE KEYPAD", screenWidth/2, screenHeight/2);
+          newStageCounter++;
+        } else {
+          newStageCounter = 0;
+          newStage = false;
+        }
+      } else {
+        background(240);
+        //on hardest difficulty, if you make a single mistake you lose automatically
+        if (game.diffSelect == 2 && keypad.wrongAnswer) {
+          game.gameState = 7;
+        }
+        keypad.display();
+      }
+      //if time runs out end game
+      if (timeRemaining <= 0) {
+        gameState = 7;
+      }
+      //pause a moment before moving to next stage
+      if (keypad.isComplete) {
+        if (newStageCounter < 50) {
+          newStageCounter++;
+        } else {
+          newStage = true;
+          newStageCounter = 0;
+          gameState = 6;
+        }
+      }
+    }
+
+Basicaly, there's a boolean variable called newStage that allows me to initialize whatever I need to, whether that be displaying the title of the stage or creating a moment of pause between stages. The middle is where the displaying happens (and this is how I know if Arduino gives up on me, because my update functions are in the serialEvent() function), and the end is where I send the game into the next stage or state.
+
+The ending, with the "the HEIST" title and the money stuff is just a little fun I had with rotate() and slow movement. Totally kills the computer, though. There isn't anything really outstanding about it, mostly things I've already implemented in the past, but check it out if you want.
+
+I'll do a final push with all the print() functions commented out so there aren't any spoilers in the Processing console. Well, it's been a long two weeks. Goodbye, Intro to IM. It was a long but fun ride, filled with a lot of sleepless nights and ~~begging~~ asking my code to work properly. I've learned a lot of new skills (mainly debugging and Arduino), so maybe I'll be able to put them to good use one day!
