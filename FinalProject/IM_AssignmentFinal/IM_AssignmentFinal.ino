@@ -38,7 +38,7 @@ int patternType;          //uses randomSeed() to designate a specific pattern
 int patternIncr = 2;      //increment by 2 each phase
 int patternLength = 2;    //current pattern length
 int pattern[16];          //stores the current pattern for the phase
-int passcodeLength = 8;  //passcode length (actual length of digits in passcode is passcodeLength/2)
+int passcodeLength = 16;  //passcode length (actual length of digits in passcode is passcodeLength/2)
 int passcode[16];         //stores entire pattern, to be sent to Processing
 
 int phaseCounter = 0;     //number of phases completed
