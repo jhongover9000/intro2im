@@ -260,7 +260,7 @@ void serialEvent(Serial myPort) {
       //game.practiceDial.update(potPosition);
     }
   }
-  if ((game.gameState == 7 || game.gameState == 8) && game.newStage) {
+  if (game.gameState == 7 || game.gameState == 8) {
     myPort.write(12);
   } else {
     myPort.write(game.gameState);
