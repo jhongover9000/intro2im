@@ -1,6 +1,17 @@
 //IM Assignment 11 (Final): Bank Heist.
 //Joseph Hong
-//Description: 
+//Description: This is a game that simulates a bank heist. There are two stages, one a keypad and
+//another a vault. I don't want to give hints, mostly because it's one of those things you need to
+//figure out and win on your own through experience, but here are the instructions anyway.
+//The keypad has 8 digits that you need to find by using the lights on the breadboard. The first light 
+//represents a row, the second a column. You need to complete the entire pattern (16 lights) before
+//you can enter the code.
+//The vault is made up of three dials, each of which alternate amongst each other. Only when it's
+//correct can you match the right number. Failing to do so will decrease the amount of time you have
+//left. I recommend using headphones for the stage, as there is audio panning to help you know which
+//dial is the one to use.
+//When the timer runs out, you lose. If you're on the hardest difficulty, one mistake will end the game.
+//Good luck! Btw the theme is Money Heist.
 //=======================================================================================================================
 //=======================================================================================================================
 //Imports

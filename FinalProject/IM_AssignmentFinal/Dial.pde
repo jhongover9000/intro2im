@@ -46,7 +46,7 @@ class Dial {
     this.locY = locY;
 
     this.lock = new Lock(dialLength, 0, totalDigits, true);
-    this.waterCup = new WaterCup(locX, locY - (imgHeight / 2 + 60));
+    this.waterCup = new WaterCup(locX, locY - (imgHeight / 2 + 65));
 
     this.isUnlocked = false;
     this.potPosPast = 0;
@@ -203,6 +203,7 @@ class Dial {
       fill(255, 0, 0);
     }
     triangle(locX, locY - imgHeight/2 - 3, locX + 10, locY - imgHeight/2 -10, locX - 10, locY - imgHeight/2 -10);
+    fill(0);
 
 
     //display real dial (using lockDigitPast)

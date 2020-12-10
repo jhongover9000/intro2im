@@ -1,4 +1,4 @@
-/*Game*/
+ /*Game*/
 /*This is the overarching class that contains all of the stages.*/
 
 //Game
@@ -175,11 +175,10 @@ class Game {
       fill(200);
       text("Instructions", screenWidth/2, screenHeight/8);
       textAlign(LEFT);
-      textSize(12);
-      text("Move around with WASD. \nGuard: Right Hold (Mouse)\n" +
-        "Guard decreases damage received, and prevents player from flinching.\n\nNormal Attack: Left Click (Mouse)" +"Specials: require MP, but are stronger.\n" + 
-        "Burst Attack: X (5 MP)   \nUltra Attack: C (10 MP)\n\nLevel up to increase and restore HP, MP, and Damage.\n\n" +
-        "Press SPACE to go back to Main Menu.", screenWidth/20, screenHeight/4, screenWidth/3, screenHeight-screenHeight/12);
+      textSize(20);
+      text("THE KEYPAD \n Follow the pattern of lights and finish the game in order to get the full 8-digit code." +
+        "\n \n THE VAULT \n Match the right numbers on the dials, which alternate, and crack the vault. The water cup" +
+        " and sounds will guide you. \n \n Press SPACE to Return to Title.", screenWidth/20, screenHeight/4, screenWidth/3, screenHeight-screenHeight/12);
     }
     ////Drill practice
     //else if (gameState == 2) {
@@ -301,7 +300,7 @@ class Game {
       textAlign(CENTER);
       textSize(32);
       fill(200);
-      text("Select Difficulty", screenWidth/2, screenHeight/8);
+      text("Select Difficulty \n \n \n \n \n \n \n \n Press SPACE to Return to Title.", screenWidth/2, screenHeight/8);
     }
 
     // //Drill Stage
@@ -407,18 +406,19 @@ class Game {
       fill(255);
       textSize(32);
       String time = "";
-      if ((timeRemaining/1000) % 60 > 9) {
-        time += String.valueOf((timeRemaining/1000) % 60);
-      } else if ((timeRemaining/1000) % 60 > 0) {
-        time += "0" + String.valueOf((timeRemaining/1000) % 60);
-      } else {
-        time += "00";
-      }
-      time += ":";
+      //display time
       if ((timeRemaining/(1000 * 60)) % 60 > 9) {
         time += String.valueOf((timeRemaining/(1000 * 60)) % 60);
       } else if ((timeRemaining/(1000 * 60)) % 60 > 0) {
         time += "0" + String.valueOf((timeRemaining/(1000 * 60)) % 60);
+      } else {
+        time += "00";
+      }
+      time += ":";
+      if ((timeRemaining/1000) % 60 > 9) {
+        time += String.valueOf((timeRemaining/1000) % 60);
+      } else if ((timeRemaining/1000) % 60 > 0) {
+        time += "0" + String.valueOf((timeRemaining/1000) % 60);
       } else {
         time += "00";
       }

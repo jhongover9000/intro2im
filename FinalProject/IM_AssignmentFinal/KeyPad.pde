@@ -113,6 +113,10 @@ class KeyPad {
 
   //Update
   void update(int[] inputs) {
+    if(lock.isFresh){
+      playerInput.clear();
+      lock.isFresh = false;
+    }
     if (!isComplete) {
       //populate the passcode array with serial input
       getPassCoords(inputs);
