@@ -38,12 +38,12 @@ int patternType;          //uses randomSeed() to designate a specific pattern
 int patternIncr = 2;      //increment by 2 each phase
 int patternLength = 2;    //current pattern length
 int pattern[16];          //stores the current pattern for the phase
-int passcodeLength = 16;  //passcode length (actual length of digits in passcode is passcodeLength/2)
+int passcodeLength = 8;  //passcode length
 int passcode[16];         //stores entire pattern, to be sent to Processing
 
 int phaseCounter = 0;     //number of phases completed
 int gameCounter = 0;      //number of matched lights in each phase (I know it doesn't make sense but it does in my head)
-int phaseEndCount = 3;    //phaseEndCount-1 * patternIncr = number of digits in passcode
+int phaseEndCount = 8;    //phaseEndCount-1 * patternIncr = number of digits in passcode
 bool phaseEnd = true;     //phase ended?
 bool gameEnd = true;      //game ended?
 
@@ -100,14 +100,8 @@ bool buttonPressedCheck(boolean isKeyPad) {
     return true;
   }
   else {
-    //if keypad stage, default is 3
-    if (isKeyPad) {
-      buttonPressed = 3;
-    }
     //else, button remains constant
-    else {
-      buttonPressed = buttonPressed;
-    }
+    buttonPressed = buttonPressed;
     return false;
   }
 }
@@ -143,12 +137,35 @@ float getDistance()
 void loop() {
   // if we get a valid byte, read analog ins:
   if (Serial.available() > 0) {
+
     // get incoming byte:
     inByte = Serial.read();
+    //Serial.println(inByte);
 
+    //    if (inByte == 2) {
+    //      //distance sensor
+    //      distance = getDistance();
+    //      Serial.print((int)distance);
+    //      Serial.print(",");
+    //
+    //      //check button pressed
+    //      if (buttonPressedCheck(false)) {
+    //        Serial.println(1);
+    //      }
+    //      else {
+    //        Serial.println(0);
+    //      }
+    //    }
 
+    //if keypad stage, begins game and reports to processing the code
+    if (inByte == 5) {
+      //send passcode to Processing
+      sendCode();
+      //begin light game for player to figure out code
+      lightGame();
+    }
     //if vault stage, send 2 values: the button that is pressed and the potentiometer value
-    if (inByte == 1) {
+    else if (inByte == 6) {
       //read potentiometer
       potPosition = analogRead(A0);
       //button pressed
@@ -156,41 +173,23 @@ void loop() {
       //send values:
       Serial.print(potPosition);
       Serial.print(",");
+      //if in practice mode, there's no need for changing dials
       Serial.println(buttonPressed);
     }
-
-    //if drilling stage, send 2 values: if button is pressed (1 or 0) and the distance (int)
-    else if (inByte == 2) {
-
-      //distance sensor
-      distance = getDistance();
-      Serial.print((int)distance);
-      Serial.print(",");
-
-      //check button pressed
-      if (buttonPressedCheck(false)) {
-        Serial.println(1);
-      }
-      else {
-        Serial.println(0);
-      }
+    else if (inByte == 12) {
+      //set up passcode for keypad
+      patternType = (int)random(0, 50);
+      initializePasscode();
     }
-
-    //if keypad stage, begins game and reports to processing the code
-    else if (inByte == 3) {
-      //send passcode to Processing
-      sendCode();
-      //begin light game for player to figure out code
-      lightGame();
+    else {
+      Serial.println("test");
     }
-
   }
 }
 
 
 void establishContact() {
   while (Serial.available() <= 0) {
-    Serial.println("0,0,0");   // send an initial string
-    delay(300);
+    Serial.println("0,0,0,0,0,0");   // send an initial string
   }
 }

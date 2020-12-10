@@ -1,8 +1,5 @@
 /*KeyPadGame*/
 /*This is the game that you match the light pattern in order to get the passcode for the door lock in the keypad stage.*/
-
-
-
 //====================================================================================================================================
 //====================================================================================================================================
 //Functions
@@ -19,7 +16,7 @@ void initializePasscode() {
 void sendCode() {
   int i = 0;
   //iterate through each index and print the number
-  for (; i < passcodeLength - 1; i++) {
+  for (; i < (passcodeLength * 2) - 1; i++) {
     Serial.print(passcode[i]);
     Serial.print(",");
   }
