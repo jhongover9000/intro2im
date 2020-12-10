@@ -14,13 +14,11 @@ import processing.serial.*;		//import serial
 //=======================================================================================================================
 //Global Variables and Setup
 
-final int screenWidth = 896;
-final int screenHeight = 504;
+int screenWidth = 896;
+int screenHeight = 504;
 
 //Random Integer Generator
 Random rand = new Random();
-
-int highScore;
 
 //UI Stuff for game
 PFont font; 
@@ -34,15 +32,19 @@ SoundFile victory;
 
 //Assets
 PImage vaultDialImg;
+PImage dollarBillImg;
 ArrayList<SoundFile> vaultDialSounds;
 SoundFile dialTick;
 SoundFile dialClick;
 SoundFile dialClack;
 ArrayList<PImage> menuBackgrounds;
 
+//Timer
 int savedTime;
 int timeRemaining = 300000;        //time, in milliseconds
 int timeReducer = 100;
+int displayCounter = 0;
+boolean timerNew = true;
 
 //Sesnors & Things
 int distance;                            //distance sensor
@@ -52,7 +54,7 @@ boolean buttonPushed;                    //if button is being held down
 int potPosition;                         //potentiometer
 
 //Game game = new Game();
-int dialLength = 10;
+int dialLength = 2;
 int[] keyPadInput;
 int keyPadLength = 8;
 
@@ -91,6 +93,7 @@ void setup() {
 
   //Images
   vaultDialImg = loadImage("vaultDial.png");
+  dollarBillImg = loadImage("bill.png");
   menuBackgrounds =  new ArrayList<PImage>();
   loadMenuBackgrounds(7);
 
@@ -103,7 +106,7 @@ void setup() {
 
 //=======================================================================================================================
 //=======================================================================================================================
-//Images and Sounds (Loading Functions)
+//Functions
 
 //Load Menu Backgrounds
 void loadMenuBackgrounds(int numImages) {
@@ -133,26 +136,40 @@ void reduceTime(int timeReducer) {
   timeRemaining -= timeReducer;
 }
 
-void displayTime() {
-  int passedTime = millis();
-  int subtract = passedTime - savedTime;
-  timeRemaining -= subtract;
-  savedTime = passedTime;
+//Display Time
+void displayTime(int timeRemaining, int normalTime) {
+  if (timeRemaining <= 0) {
+    timeRemaining = 0;
+    normalTime = timeRemaining;
+  }
   textSize(15);
   textAlign(CENTER);
-  fill(0);
-  // textFont(words, 50);
-  // text(String.valueOf((timeRemaining/1000) % 60)+ , 350, 175);
-  // text(":", 300, 175);
-  // text(String.valueOf((timeRemaining/(1000 * 60)) % 60), 250, 175);
-  text(String.valueOf((timeRemaining/(1000 * 60)) % 60) + ":" + String.valueOf((timeRemaining/1000) % 60), screenWidth - 200, 50);
+  //if player made mistake or time is less than 30 sec, turn red
+  if (timeRemaining != normalTime || timeRemaining <= 30000) {
+    fill(255, 0, 0);
+  } else {
+    fill(0);
+  }
+  textFont(font, 20);
+  //seconds
+  if ((timeRemaining/1000) % 60 > 9) {
+    text(String.valueOf((timeRemaining/1000) % 60), screenWidth/2 + 50, 50);
+  } else if ((timeRemaining/1000) % 60 > 0) {
+    text("0" + String.valueOf((timeRemaining/1000) % 60), screenWidth/2 + 50, 50);
+  } else {
+    text("00", screenWidth/2 + 50, 50);
+  }
+  text(":", screenWidth/2, 50);
+  //minutes
+  if ((timeRemaining/(1000 * 60)) % 60 > 9) {
+    text(String.valueOf((timeRemaining/(1000 * 60)) % 60), screenWidth/2 - 50, 50);
+  } else if ((timeRemaining/(1000 * 60)) % 60 > 0) {
+    text("0" + String.valueOf((timeRemaining/(1000 * 60)) % 60), screenWidth/2 - 50, 50);
+  } else {
+    text("00", screenWidth/2 - 50, 50);
+  }
+  //text(String.valueOf((timeRemaining/(1000 * 60)) % 60) + ":" + String.valueOf((timeRemaining/1000) % 60), screenWidth - 200, 50);
 }
-
-//=======================================================================================================================
-//=======================================================================================================================
-//Classes
-
-
 
 //=======================================================================================================================
 //=======================================================================================================================
@@ -161,11 +178,46 @@ void displayTime() {
 //Autocrack Assets
 //int num = 0;
 
-
 Game game = new Game();
 
 void draw() {
+  //save time before update
+  int normalTime = timeRemaining;
+  int passedTime = millis();
+
   game.play();
+
+  //if timer is new, change the amount of time depending on the difficulty
+  if ((4 < game.gameState && game.gameState < 7)) {
+    //when the stage is starting
+    if ((timerNew) && game.newStageCounter > 199) {
+      if (game.diffSelect == 0) {
+        timeRemaining = 480000;   //8 min on easy
+        timeReducer = 100;
+      } else if (game.diffSelect == 1) {
+        timeRemaining = 300000;   //6 min on normal
+        timeReducer = 1000;
+      } else {
+        timeRemaining = 180000;   //3 min on hard
+      }
+      timerNew = false;
+    }
+    if (!game.newStage) {
+
+      //on hardest difficulty, if you make a single mistake you lose automatically
+      if (game.diffSelect == 2 && timeRemaining != normalTime) {
+        game.gameState = 7;
+      }
+
+      //Update Time & savedTime
+      int subtract = passedTime - savedTime;
+      normalTime -= subtract;
+      timeRemaining -= subtract;
+      savedTime = passedTime;
+      println(normalTime + ":" + timeRemaining);
+      displayTime(timeRemaining, normalTime);
+    }
+  }
 }
 
 //Serial Event
@@ -174,13 +226,12 @@ void serialEvent(Serial myPort) {
   String myString = myPort.readStringUntil('\n');
   //if you got any bytes other than the linefeed:
   myString = trim(myString);
-  println(myString);
-
-
+  //println(myString);
+  myPort.clear();
   //split the string at the commas and convert the sections into integers:
   int sensors[] = int(split(myString, ','));
 
-  ////if drill
+  //spent too much time debugging; drill phase was excluded
   //if (game.gameState == 2) {
   //  if (sensors.length > 1) {
   //    distance = sensors[0];
@@ -191,36 +242,54 @@ void serialEvent(Serial myPort) {
   //    }
   //  }
   //}
+
   //if keypad
-  if (game.gameState == 3) {
-    if (sensors.length > 1) {
+  if (game.gameState == 5) {
+    if (sensors.length > 5) {
       keyPadInput = sensors;
-      game.practiceKeyPad.update(keyPadInput);
+      game.keypad.update(keyPadInput);
+      //game.practiceKeyPad.update(keyPadInput);
     }
   }
   //if vault
-  else if (game.gameState == 4) {
-    if (sensors.length > 1) {
+  else if (game.gameState == 6) {
+    if (1 < sensors.length && sensors.length < 3) {
       potPosition = sensors[0];
       buttonPressed = sensors[1];
-      game.practiceDial.update(potPosition);
+      game.vault.update(potPosition, buttonPressed);
+      //game.practiceDial.update(potPosition);
     }
   }
-  
-  int output = game.gameState;
-  myPort.write(output);
+  myPort.write(game.gameState);
+}
+
+void mousePressed() {
+  if (mouseButton == LEFT) {
+    if ((game.gameState >= 2 && mouseReleased) || game.gameState == 0) {
+      mouseClicked = true;
+    }
+  }
 }
 
 void mouseReleased() {
-  mouseReleased = true;
+  //This is for the character selection screen
+  if (mouseButton == LEFT) {
+    if (game.gameState >= 2) {
+      mouseReleased = true;
+    }
+  }
 }
 
 void keyReleased() {
-  //SPACE -- RESET GAME OR NEW STAGE
+  //SPACE -- RESET GAME
   if (keyCode == 32) {
     //Reset Game
-    if (game.gameState == 1 || game.gameState == 4 || game.gameState == 5) {
+    if (game.gameState == 1 || game.gameState == 7 || game.gameState == 8) {
+      screenWidth = 896;
+      screenHeight = 504;
       game = new Game();
+      timeRemaining = 300000;
+      timerNew = true;
     }
   }
 }

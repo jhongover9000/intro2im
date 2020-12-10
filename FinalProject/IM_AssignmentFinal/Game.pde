@@ -15,13 +15,15 @@ class Game {
   int newStageCounter;
   int backgroundSet;
 
-  KeyPad practiceKeyPad;
-  Dial practiceDial;
+  //practice stages cause errors for arduino sometimes so i commented out
+  // KeyPad practiceKeyPad;
+  // Dial practiceDial;
 
   VaultStage vault;
   KeyPad keypad;
 
   int colorChange;              //alternates colors for background on game over
+  ObjectList objects;
   boolean gameClear;
 
 
@@ -36,11 +38,15 @@ class Game {
     this.newStageCounter = 0;
     this.backgroundSet = 0;
 
-    practiceKeyPad = new KeyPad(3*screenWidth/4, 2*screenHeight/3, 50, 4);
-    practiceDial = new Dial(0, 99, screenWidth/2, screenHeight/3, 300, 300);
+    //practiceKeyPad = new KeyPad(2*screenWidth/3, screenHeight/3, 50, 4);
+    //practiceDial = new Dial(0, 99, screenWidth/2, screenHeight/3, 300, 300);
 
     vault = new VaultStage();
-    keypad = new KeyPad(3*screenWidth/4, 2*screenHeight/3, 50, keyPadLength);
+    keypad = new KeyPad(screenWidth/2 - 75, screenHeight/3, 50, keyPadLength);
+
+    this.colorChange = 0;
+    this.objects = new ObjectList();
+    this.gameClear = false;
   }
 
   void nthMenuButton(int n, int game, float firstButtonX1, float firstButtonX2, float firstButtonY1, float firstButtonY2, String word) {
@@ -53,11 +59,12 @@ class Game {
     if ( ( firstButtonX1 < mouseX && mouseX < firstButtonX2) && (firstButtonY1 < mouseY && mouseY < firstButtonY2) ) {
       fill(230);
       //If mouse is pressed while hovering over option, return gameState
-      if (mouseReleased) {
+      if (mouseClicked) {
         //Add sound effect of button being selected
         if (!button.isPlaying()) {
           button.play();
         }
+        mouseClicked = false;
         mouseReleased = false;
         gameState = game;
       }
@@ -92,7 +99,7 @@ class Game {
       }
     }
     //Game (I want absolute silence, especially for the dial)
-    else if ((2 < gameState && gameState < 9) && newStage) {
+    else if ((3 < gameState && gameState < 9) && newStage) {
       if (victory.isPlaying()) {
         victory.stop();
       }
@@ -103,7 +110,7 @@ class Game {
         openingOST.stop();
       }
       //Game Over
-      else if (gameState == 9 && !defeat.isPlaying()) {
+      else if (gameState == 7 && !defeat.isPlaying()) {
         if (victory.isPlaying()) {
           victory.stop();
         }
@@ -111,7 +118,7 @@ class Game {
         defeat.amp(0.1);
       }
       //Victory
-      else if (gameState == 10 && !victory.isPlaying()) {
+      else if (gameState == 8 && !victory.isPlaying()) {
         if (defeat.isPlaying()) {
           defeat.stop();
         }
@@ -146,20 +153,20 @@ class Game {
       float firstButtonY2 = screenHeight/2+screenHeight/12;
 
       //Start Game
-      nthMenuButton(0, 5, firstButtonX1, firstButtonX2, firstButtonY1, firstButtonY2, "Depart");
+      nthMenuButton(0, 4, firstButtonX1, firstButtonX2, firstButtonY1, firstButtonY2, "Depart");
 
       //Instructions
-      nthMenuButton(1, 3, firstButtonX1, firstButtonX2, firstButtonY1, firstButtonY2, "Practice");
+      nthMenuButton(1, 1, firstButtonX1, firstButtonX2, firstButtonY1, firstButtonY2, "Practice");
 
       //Exit
-      nthMenuButton(2, 7, firstButtonX1, firstButtonX2, firstButtonY1, firstButtonY2, "Exit");
+      nthMenuButton(2, 10, firstButtonX1, firstButtonX2, firstButtonY1, firstButtonY2, "Exit");
 
       //Change Background
-      nthMenuButton(3, 6, firstButtonX1, firstButtonX2, firstButtonY1, firstButtonY2, "Change Background");
+      nthMenuButton(3, 9, firstButtonX1, firstButtonX2, firstButtonY1, firstButtonY2, "Change Background");
     }
 
 
-    //Practice Selection Screen
+    //Instructions (practice modes caused arduino to disconnect so I'm just writing them out)
     else if (gameState == 1) {
       //Display instructions
       background(0);
@@ -174,113 +181,127 @@ class Game {
         "Burst Attack: X (5 MP)   \nUltra Attack: C (10 MP)\n\nLevel up to increase and restore HP, MP, and Damage.\n\n" +
         "Press SPACE to go back to Main Menu.", screenWidth/20, screenHeight/4, screenWidth/3, screenHeight-screenHeight/12);
     }
-    //Drill practice
-    else if (gameState == 2) {
-    }
+    ////Drill practice
+    //else if (gameState == 2) {
+    //}
 
-    //Keypad practice 
-    else if (gameState == 3) {
-      myPort.write(3);
-      if (newStage) {
-        if (newStageCounter < 200) {
-          background(0);
-          textSize(32);
-          textAlign(CENTER, CENTER);
-          text("PROLOGUE: THE BASICS (2)", screenWidth/2, screenHeight/2);
-          newStageCounter++;
-        } else {
-          keyPadLength = 4;
-          newStageCounter = 0;
-          newStage = false;
-        }
-      } else {
-        background(240);
-        practiceKeyPad.display();
-      }
-      //pause a moment before moving to next stage
-      if (practiceKeyPad.isComplete) {
-        if (newStageCounter < 50) {
-          newStageCounter++;
-        } else {
-          newStageCounter = 0;
-          gameState = 4;
-        }
-      }
-    }
+    // //Keypad practice 
+    // else if (gameState == 2) {
+    //  myPort.write(3);
+    //  if (newStage) {
+    //    if (newStageCounter < 200) {
+    //      background(0);
+    //      textSize(32);
+    //      textAlign(CENTER, CENTER);
+    //      text("PROLOGUE: THE BASICS (1)", screenWidth/2, screenHeight/2);
+    //      newStageCounter++;
+    //    } else {
+    //      keyPadLength = 4;
+    //      newStageCounter = 0;
+    //      newStage = false;
+    //    }
+    //  } else {
+    //    background(240);
+    //    practiceKeyPad.display();
+    //  }
+    //  //pause a moment before moving to next stage
+    //  if (practiceKeyPad.isComplete) {
+    //    if (newStageCounter < 50) {
+    //      newStageCounter++;
+    //    } else {
+    //      newStageCounter = 0;
+    //      gameState = 3;
+    //    }
+    //  }
+    // }
 
-    //Vault practice
-    else if (gameState == 4) {
-      myPort.write(4);
-      if (newStage) {
-        if (newStageCounter < 200) {
-          background(0);
-          textSize(32);
-          textAlign(CENTER, CENTER);
-          text("PROLOGUE: BASICS (3)", screenWidth/2, screenHeight/2);
-          newStageCounter++;
-        } else {
-          dialLength = 3;
-          newStage = false;
-        }
-      } else {
-        background(240);
-        practiceDial.display();
-      }
-      //pause a moment before moving to main menu
-      if (practiceDial.isUnlocked) {
-        if (newStageCounter < 50) {
-          newStageCounter++;
-        } else {
-          newStageCounter = 0;
-          gameState = 0;
-        }
-      }
-    }
+    // //Vault practice
+    // else if (gameState == 3) {
+    //  myPort.write(4);
+    //  if (newStage) {
+    //    if (newStageCounter < 200) {
+    //      background(0);
+    //      textSize(32);
+    //      textAlign(CENTER, CENTER);
+    //      text("PROLOGUE: BASICS (2)", screenWidth/2, screenHeight/2);
+    //      newStageCounter++;
+    //    } else {
+    //      dialLength = 3;
+    //      newStage = false;
+    //    }
+    //  } else {
+    //    background(240);
+    //    practiceDial.display();
+    //  }
+    //  //pause a moment before moving to main menu
+    //  if (practiceDial.isUnlocked) {
+    //    if (newStageCounter < 50) {
+    //      newStageCounter++;
+    //    } else {
+    //      newStageCounter = 0;
+    //      gameState = 0;
+    //    }
+    //  }
+    // }
 
     //Difficulty Selection
-    else if (gameState == 5) {
+    else if (gameState == 4) {
       background(0);
       //if on right, highlight right (shoplifter dif)
       if ((0 < mouseX && mouseX < screenWidth/3)) {
-        fill(30);
-        rect(screenWidth/2, 0, screenWidth/2, screenHeight);
+        fill(10, 100, 10);
+        rectMode(CORNER);
+        rect(0, 0, screenWidth/3, screenHeight);
         textAlign(CENTER);
         textSize(32);
         fill(200);
-        text("Shoplifter", screenWidth/6, screenHeight/8);
-        if (mouseReleased) {
+        text("Shoplifter", screenWidth/6, screenHeight/4);
+        if (mouseClicked) {
+          mouseClicked = false;
           mouseReleased = false;
           //set difficulty and change game state
           diffSelect = 0;
-          gameState = 7;
+          gameState = 5;
         }
       }
       //else if, highlight middle (bank robber)
       else if ((screenWidth/3+1 < mouseX && mouseX < 2*screenWidth/3)) {
-        fill(30);
-        rect(0, 0, screenWidth/2, screenHeight);
-        if (mouseReleased) {
+        fill(10, 10, 100);
+        rectMode(CORNER);
+        rect(screenWidth/3, 0, screenWidth/3, screenHeight);
+        textAlign(CENTER);
+        textSize(32);
+        fill(200);
+        text("Bank Robber", screenWidth/2, screenHeight/4);
+        if (mouseClicked) {
+          mouseClicked = false;
           mouseReleased = false;
           //set difficulty and change game state
           diffSelect = 1;
-          gameState = 7;
+          gameState = 5;
         }
       }
       //else, highlight left (master thief dif)
       else if ((2*screenWidth/3+1 < mouseX && mouseX < screenWidth)) {
-        fill(30);
-        rect(0, 0, 5*screenWidth/6, screenHeight);
+        fill(100, 10, 10);
+        rectMode(CORNER);
+        rect(2*screenWidth/3, 0, screenWidth/3, screenHeight);
+        textAlign(CENTER);
+        textSize(32);
+        fill(200);
+        text("Phantom Thief", 5*screenWidth/6, screenHeight/4);
         if (mouseClicked) {
+          mouseClicked = false;
           mouseReleased = false;
           //set difficulty and change game state
           diffSelect = 2;
-          gameState = 7;
+          gameState = 5;
         }
       }
       textAlign(CENTER);
       textSize(32);
       fill(200);
-      text("Phantom Thief", screenWidth/2, screenHeight/8);
+      text("Select Difficulty", screenWidth/2, screenHeight/8);
     }
 
     // //Drill Stage
@@ -304,51 +325,30 @@ class Game {
     //   }
     // }
     //Keypad Stage
-    else if (gameState == 7) {
+    else if (gameState == 5) {
       if (newStage) {
         if (newStageCounter < 200) {
           background(0);
+          fill(255);
           textSize(32);
           textAlign(CENTER, CENTER);
-          text("CHAPTER 2: THE KEYPAD", screenWidth/2, screenHeight/2);
+          text("CHAPTER 1: THE KEYPAD", screenWidth/2, screenHeight/2);
           newStageCounter++;
         } else {
-          keyPadLength = 8;
           newStageCounter = 0;
           newStage = false;
         }
       } else {
         background(240);
+        //on hardest difficulty, if you make a single mistake you lose automatically
+        if (game.diffSelect == 2 && keypad.wrongAnswer) {
+          game.gameState = 7;
+        }
         keypad.display();
       }
-      //pause a moment before moving to next stage
-      if (keypad.isComplete) {
-        if (newStageCounter < 100) {
-          newStageCounter++;
-        } else {
-          newStage = true;
-          newStageCounter = 0;
-          gameState = 8;
-        }
-      }
-    }
-    //Vault Stage
-    else if (gameState == 8) {
-      if (newStage) {
-        if (newStageCounter < 200) {
-          background(0);
-          textSize(32);
-          textAlign(CENTER, CENTER);
-          text("CHAPTER 3: THE VAULT", screenWidth/2, screenHeight/2);
-          newStageCounter++;
-        } else {
-          dialLength = 10;
-          newStageCounter = 0;
-          newStage = false;
-        }
-      } else {
-        background(240);
-        vault.display();
+      //if time runs out end game
+      if (timeRemaining <= 0) {
+        gameState = 7;
       }
       //pause a moment before moving to next stage
       if (keypad.isComplete) {
@@ -357,34 +357,111 @@ class Game {
         } else {
           newStage = true;
           newStageCounter = 0;
-          gameState = 10;
+          gameState = 6;
+        }
+      }
+    }
+    //Vault Stage
+    else if (gameState == 6) {
+      if (newStage) {
+        if (newStageCounter < 200) {
+          background(0);
+          fill(255);
+          textSize(32);
+          textAlign(CENTER, CENTER);
+          text("CHAPTER 2: THE VAULT", screenWidth/2, screenHeight/2);
+          newStageCounter++;
+        } else {
+          newStageCounter = 0;
+          newStage = false;
+        }
+      } else {
+        background(240);
+        //on hardest difficulty, if you make a single mistake you lose automatically
+        if (game.diffSelect == 2 && vault.wrongAnswer) {
+          game.gameState = 7;
+        }
+        vault.display();
+      }
+      //if time runs out end game
+      if (timeRemaining <= 0) {
+        gameState = 7;
+      }
+      //pause a moment before moving to next stage
+      if (vault.isComplete) {
+        if (newStageCounter < 50) {
+          newStageCounter++;
+        } else {
+          newStage = true;
+          newStageCounter = 0;
+          gameState = 8;
         }
       }
     }
 
     //Game Over & Reset (with space bar)
-    else if (gameState == 9) {
+    else if (gameState == 7) {
       background(0);
       //Display level & score
       textAlign(CENTER, CENTER);
-      fill(100);
+      fill(255);
       textSize(32);
-      text("Defeat... \nLevel stageNum sco", screenWidth/2, screenHeight/2 );
+      String time = "";
+      if ((timeRemaining/1000) % 60 > 9) {
+        time += String.valueOf((timeRemaining/1000) % 60);
+      } else if ((timeRemaining/1000) % 60 > 0) {
+        time += "0" + String.valueOf((timeRemaining/1000) % 60);
+      } else {
+        time += "00";
+      }
+      time += ":";
+      if ((timeRemaining/(1000 * 60)) % 60 > 9) {
+        time += String.valueOf((timeRemaining/(1000 * 60)) % 60);
+      } else if ((timeRemaining/(1000 * 60)) % 60 > 0) {
+        time += "0" + String.valueOf((timeRemaining/(1000 * 60)) % 60);
+      } else {
+        time += "00";
+      }
+      text("You Lose... \n Time: "+ time + "\n\n Press SPACE to return to menu.", screenWidth/2, screenHeight/2 );
     }
 
     //Game Complete
-    else if (gameState == 10) {
-      //Game end
-      background(0);
-      //Display level & score
-      textAlign(CENTER, CENTER);
-      fill(100);
-      textSize(32);
-      text("Congratulations! You Win! \nLevel: ", screenWidth/2, screenHeight/2 );
+    else if (gameState == 8) {
+      if (newStage) {
+        if (newStageCounter < 150) {
+          //Game end
+          background(0);
+          newStageCounter++;
+        } else {
+          newStage = false;
+          newStageCounter = 0;
+          if (!victory.isPlaying()) {
+            victory.play();
+          }
+        }
+      } else {
+        //Display gameEnd
+        background(0);
+        textAlign(CENTER, CENTER);
+        objects.updateAndDisplay();
+        fill(255);
+        textSize(100);
+        text("the HEIST", screenWidth/2, screenHeight/2);
+        newStageCounter++;
+        if (newStageCounter > 1000) {
+          tint(255, 110);
+          objects.updateAndDisplay();
+          noTint();
+          text("the HEIST", screenWidth/2, screenHeight/2);
+          textSize(20);
+          fill(100);
+          text("press SPACE to restart", screenWidth/2, screenHeight/2 + 70);
+        }
+      }
     }
 
     //Change Background
-    else if (gameState == 6) {
+    else if (gameState == 9) {
       menuImageNum = rand.nextInt(menuBackgrounds.size());
       menuImage = menuBackgrounds.get(menuImageNum);
       //Move to main menu
@@ -392,7 +469,7 @@ class Game {
     }
 
     //Exit
-    else if (gameState == 7) {
+    else if (gameState == 10) {
       exit();
     }
   }

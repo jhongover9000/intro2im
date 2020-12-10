@@ -1,6 +1,6 @@
 /*Dial*/
 /*Dials are part of the vault lock. These are spinny circles (pardon my childish speech; I can't help it)
-that are controlled with the potentiometer.*/
+ that are controlled with the potentiometer.*/
 
 
 class Dial {
@@ -31,6 +31,8 @@ class Dial {
   int lockDigitPast;		//stores number of the latest matched password digit
   int potPosPast;	//stores past value of potentiometer
 
+  boolean wrongAnswer;
+
   boolean isUnlocked;
 
   //Constructor
@@ -55,20 +57,22 @@ class Dial {
     this.isSelected = false;
     this.isActive = false;
     this.isAssigned = false;
+
+    this.wrongAnswer = false;
   }
 
   //if player overturns the dial, failure count will increase and lock will reset
   boolean checkOverTurn() {
     if (lock.iter != 0 && lock.iter%2 == 0) {
       if (lockDigit < lock.getLastDigit()) {
-        println("overturn. timeRemaining:"+ timeRemaining);
+        //println("overturn. timeRemaining:"+ timeRemaining);
         return true;
       } else {
         return false;
       }
     } else {
       if (lockDigit > lock.getLastDigit()) {
-        println("overturn. timeRemaining:"+ timeRemaining);
+        //println("overturn. timeRemaining:"+ timeRemaining);
         return true;
       } else {
         return false;
@@ -96,11 +100,15 @@ class Dial {
       isActive = false;
     }
 
+    if (wrongAnswer) {
+      wrongAnswer = false;
+    }
+
     //while locked, player can move dial
     if (!isUnlocked) {
       //Tester
-      // println("isSelected:" + isSelected + "isAssigned:" + isAssigned +"  isActive:"+isActive+"  isUnlocked:"+isUnlocked+"  lockdigit:"+lockDigit+
-      //  "  passcodeDigit:"+lock.passcode.get(lock.iter) + "  iter:" + lock.iter +"  checkIter:"+lock.checkInput(lockDigit));
+      println("isSelected:" + isSelected + "isAssigned:" + isAssigned +"  isActive:"+isActive+"  isUnlocked:"+isUnlocked+"  lockdigit:"+lockDigit+
+        "  passcodeDigit:"+lock.passcode.get(lock.iter) + "  iter:" + lock.iter +"  checkIter:"+lock.checkInput(lockDigit));
 
       //if dial has been selected (when you press a different button it deselects)
       if (isSelected) {
@@ -143,11 +151,13 @@ class Dial {
 
             //if overturn, reset lock and reduceTime()
             if (checkOverTurn()) {
+              wrongAnswer = true;
               reduceTime(timeReducer);
             }
             //if unassigned and player matches digit, reset lock and reduceTime()
             if (!isAssigned && lock.checkInput(lockDigit)) {
-              println("not right!! time remaining:"+timeRemaining);
+              wrongAnswer = true;
+              //println("not right!! time remaining:"+timeRemaining);
               reduceTime(timeReducer);
             }
             //if the lock digit is assigned and correct, then the lock will move on to the next digit.
@@ -156,13 +166,13 @@ class Dial {
                 lock.iter++;
               }
 
-              println("passcode:" + lock.getLastDigit() + "lockdigit:"+lockDigit);
+              //println("passcode:" + lock.getLastDigit() + "lockdigit:"+lockDigit);
               isMatched = true;
               //water ripples
               waterCup.isRippling = true;
               //upon matching the digit, the dial checks if the entire passcode has been matched
               if (lock.checkLock()) {
-                print("unlocked");
+                //print("unlocked");
                 isUnlocked = true;
               }
             }
@@ -184,7 +194,16 @@ class Dial {
     imageMode(CENTER);
 
     fill(150);
-    rect(locX, locY, imgWidth + 10, imgHeight + 10);
+    rect(locX, locY, imgWidth + 10, imgHeight + 30);
+
+    //triangle over dial
+    if (isUnlocked) {
+      fill(0, 255, 0);
+    } else {
+      fill(255, 0, 0);
+    }
+    triangle(locX, locY - imgHeight/2 - 3, locX + 10, locY - imgHeight/2 -10, locX - 10, locY - imgHeight/2 -10);
+
 
     //display real dial (using lockDigitPast)
     pushMatrix();

@@ -38,9 +38,9 @@ class KeyPad {
     this.playerInput = new ArrayList<Integer>();
 
     this.passcodeLen = passcodeLen;
-    this.noInput = true;
-    this.wrongAnswer = false;
-    this.isComplete = false;
+    this.noInput = true; 
+    this.wrongAnswer = false;               
+    this.isComplete = false;            
 
     //make the matrix of 1-9 (3x3)
     int num = 1;
@@ -56,33 +56,46 @@ class KeyPad {
 
   //Get passcoords with Serial Input
   void getPassCoords(int[] inputs) {
+    //println("clearing");
     passcodeCoords.clear();
     //populates the passcodecoords array with input from Serial
     for (int i : inputs) {
       passcodeCoords.add(i);
     }
-    int i  = 0;
-    for (; i < passcodeCoords.size() -1; i++) {
-      print(passcodeCoords.get(i) + ",");
-    }
-    println(passcodeCoords.get(i));
+    // print("coords: ");
+    // int i  = 0;
+    // for (; i < passcodeCoords.size() -1; i++) {
+    //   print(passcodeCoords.get(i) + ",");
+    // }
+    // println(passcodeCoords.get(i));
   }
 
   void createPasscode() {
     //creates passcode using the pairs of numbers (increments by 2)
     int j = 0;
-    for (int i = 0; i < passcodeLen*2; i+=2) {
+    int i = 0;
+    while (i <= 15) {
+      //print("passcode: ");
       int row = passcodeCoords.get(i);
-      int col = passcodeCoords.get(i+1);
+      //print("row:" + row);
+      i++;
+      int col = passcodeCoords.get(i);
+      //print(" col:" + col);
+      i++;
       int digit = numMatrix.get(row).get(col);
+      //println(" num:" + digit);
       lock.passcode.set(j, digit);
       j++;
+      if (j == passcodeLen) {
+        break;
+      }
     }
-    // int i  = 0;
-    // for (; i < lock.passcode.size() -1; i++) {
-    //   print(lock.passcode.get(i) + ",");
-    // }
-    // println(lock.passcode.get(i));
+    print("passcode: ");
+    i = 0;
+    for (; i < lock.passcode.size() - 1; i++) {
+      print(lock.passcode.get(i) + ",");
+    }
+    println(lock.passcode.get(i));
   }
 
   //Check Inputs
@@ -103,13 +116,20 @@ class KeyPad {
     if (!isComplete) {
       //populate the passcode array with serial input
       getPassCoords(inputs);
-      createPasscode();
+      //println("passcode creating?");
+      if (passcodeCoords.size() >= passcodeLen) { 
+        createPasscode();
+      }
+      //print("passcode created");
       //update keys; if one is selected then add to the player's input
       for (Key k : keys) {
+        //print("updating");
         k.update();
         if (k.isSelected) {
           noInput = false;
           if (playerInput.size() < passcodeLen) {
+            button.play();
+            button.amp(0.2);
             playerInput.add(k.num);
           }
           k.isSelected = false;
@@ -123,6 +143,7 @@ class KeyPad {
             isComplete = true;
           } else {
             //clear answer and reduce time
+            println("wrong answer!");
             wrongAnswer = true;
             reduceTime(100*timeReducer);
           }

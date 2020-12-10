@@ -1,7 +1,7 @@
 /*Water Cup*/
 /*This file holds the class for a cup of water, which is used for the vault dial. When the dial lock
-returns true (correct digit), the water in the cup will ripple. You can move the cup between dials
-if you need to by using the buttons.*/
+ returns true (correct digit), the water in the cup will ripple. You can move the cup between dials
+ if you need to by using the buttons.*/
 
 class WaterCup {
   //for ripple effect

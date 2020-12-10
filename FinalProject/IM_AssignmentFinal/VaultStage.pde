@@ -1,8 +1,8 @@
 /*Vault Stage*/
 /*The vault stage uses dials, locks, and watercups in order to create a contraption of three dials that must be
-alternated from while solving the code for all of them. This stage uses the pan() function in order to give hints
-to which dial is the next assigned dial, so headphones are recommended for play (or stereo speakers). The stage
-is marked as completed when all three dials have been unlocked.*/
+ alternated from while solving the code for all of them. This stage uses the pan() function in order to give hints
+ to which dial is the next assigned dial, so headphones are recommended for play (or stereo speakers). The stage
+ is marked as completed when all three dials have been unlocked.*/
 
 class VaultStage {
   //dials
@@ -16,6 +16,7 @@ class VaultStage {
 
   boolean isNew;            //if new stage
   boolean isComplete;       //if completed or not
+  boolean wrongAnswer;      //if mistakes were made
 
 
 
@@ -36,6 +37,7 @@ class VaultStage {
 
     this.isNew = true;
     this.isComplete = false;
+    this.wrongAnswer = false;
   }
 
   //Dial Select (Player)
@@ -64,7 +66,7 @@ class VaultStage {
       while (dials.get(choice).isUnlocked == true) {
         choice = (int)random(0, 3);
       }
-      println("assinging " + choice);
+      //println("assinging " + choice);
       assignedDial = choice;
 
       //assign dial
@@ -100,7 +102,7 @@ class VaultStage {
     if (dials.get(dialNum).isMatched) {
       //print("match occurred");
       dials.get(dialNum).isMatched = false;
-      
+
       //if the lock is unlocked, then add its number to completedDials
       if (dials.get(dialNum).isUnlocked) {
         completedDials.add(dialNum);
@@ -123,6 +125,11 @@ class VaultStage {
 
   //Update (uses potentiometer and button for dial selection)
   void update(int potPosition, int buttonPressed) {
+    //resets wrongAnswer
+    if (wrongAnswer) {
+      wrongAnswer = false;
+    }
+
     //if all dials have been completed, stage is complete
     //if new, assign first dial
     if (isNew) {
@@ -135,6 +142,10 @@ class VaultStage {
       dialSelect(buttonPressed);
       //update dials
       dials.get(selectedDial).update(potPosition);
+      //sets wronganswer to true if working dial is wrong
+      if (dials.get(selectedDial).wrongAnswer) {
+        this.wrongAnswer = true;
+      }
       //if player has correctly match the assigned dial, assign a new one
       if (checkMatch(assignedDial)) {
         dialAssign();

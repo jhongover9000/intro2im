@@ -1,7 +1,7 @@
 /*Lock*/
 /*Description: Locks consist of an array of integers (the code, which can be assigned using the
-random function; the parameters of the function will be set in the constructor, as well as the
-number of digits in the passcode) and have a method of checking a specific index with a number.*/
+ random function; the parameters of the function will be set in the constructor, as well as the
+ number of digits in the passcode) and have a method of checking a specific index with a number.*/
 
 class Lock {
   public ArrayList<Integer> passcode;    //stores passcode digits
