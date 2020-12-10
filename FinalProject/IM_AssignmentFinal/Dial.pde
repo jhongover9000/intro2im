@@ -143,12 +143,12 @@ class Dial {
 
             //if overturn, reset lock and reduceTime()
             if (checkOverTurn()) {
-              reduceTime();
+              reduceTime(timeReducer);
             }
             //if unassigned and player matches digit, reset lock and reduceTime()
             if (!isAssigned && lock.checkInput(lockDigit)) {
               println("not right!! time remaining:"+timeRemaining);
-              reduceTime();
+              reduceTime(timeReducer);
             }
             //if the lock digit is assigned and correct, then the lock will move on to the next digit.
             else if (isAssigned && lock.checkInput(lockDigit)) {

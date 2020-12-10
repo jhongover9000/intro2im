@@ -4,13 +4,13 @@ random function; the parameters of the function will be set in the constructor, 
 number of digits in the passcode) and have a method of checking a specific index with a number.*/
 
 class Lock {
-  ArrayList<Integer> passcode;    //stores passcode digits
+  public ArrayList<Integer> passcode;    //stores passcode digits
   int len;                 //length of passcode
-  int iter;                  	//acts as an iterator reference by storing the index of current digit
-  boolean isFresh;        	//is true when the lock is fresh
+  int iter;                    //acts as an iterator reference by storing the index of current digit
+  boolean isFresh;          //is true when the lock is fresh
   boolean isUnlocked;         //is true when all digits have been matched
 
-  //Constructor (length, parameters for digits, whether or not the lock is a dial)
+  //Constructor (length of passcode, parameters for digits, whether or not the lock is a dial)
   Lock(int len, int startNum, int endNum, boolean isDial) {
     this.passcode = new ArrayList<Integer>();
     this.len = len;
@@ -19,7 +19,7 @@ class Lock {
     if (isDial) {
       //set initial value (first digit)
       int val1 = (int)random(startNum, endNum + 1);
-      print(val1 + ",");
+      //print(val1 + ",");
       passcode.add(val1);
       //when a value is selected, this becomes the endpoint value for the next number
       //after that, the next value is the start point. then the next is the endpoint.
@@ -29,15 +29,21 @@ class Lock {
         //if i is odd, (int)random(startNum,passcode.get(i-1) -1). subtract 1 to keep from getting same number consecutively
         if (i % 2 == 1) {
           temp = (int)random(startNum, passcode.get(i - 1) - 1);
-          print(temp + ",");
+          //print(temp + ",");
           passcode.add(temp);
         }
         //if i is even, (int)random(val2 +1,endNum). add 1 to keep from getting same number consecutively
         else if (i % 2 == 0) {
           temp = (int)random(passcode.get(i - 1) + 1, endNum + 1);
-          print(temp + ",");
+          //print(temp + ",");
           passcode.add(temp);
         }
+      }
+    }
+    //if not dial, then just populate with random numbers
+    else {
+      for (int i = 0; i < len; i++) {
+        passcode.add((int)random(startNum, endNum+1));
       }
     }
     this.isUnlocked = false;

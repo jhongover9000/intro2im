@@ -14,26 +14,51 @@ import processing.serial.*;		//import serial
 //=======================================================================================================================
 //Global Variables and Setup
 
-final int screenWidth = 852;
-final int screenHeight = 480;
+final int screenWidth = 896;
+final int screenHeight = 504;
+
+//Random Integer Generator
+Random rand = new Random();
 
 int highScore;
 
+//UI Stuff for game
+PFont font; 
+SoundFile openingOST;
+SoundFile button;
+SoundFile stageOST1;
+SoundFile stageOST2;
+SoundFile bossOST;
+SoundFile defeat;
+SoundFile victory;
+
+//Assets
 PImage vaultDialImg;
 ArrayList<SoundFile> vaultDialSounds;
 SoundFile dialTick;
 SoundFile dialClick;
 SoundFile dialClack;
+ArrayList<PImage> menuBackgrounds;
 
 int savedTime;
 int timeRemaining = 300000;        //time, in milliseconds
+int timeReducer = 100;
 
-int buttonPressed;
-int potPosition;
-int distance;
+//Sesnors & Things
+int distance;                            //distance sensor
+ArrayList<Integer> passcodeCoords;       //light game
+int buttonPressed;                       //buttons
+boolean buttonPushed;                    //if button is being held down
+int potPosition;                         //potentiometer
 
 //Game game = new Game();
 int dialLength = 10;
+int[] keyPadInput;
+int keyPadLength = 8;
+
+//Checkers for Mouse
+boolean mouseClicked;
+boolean mouseReleased;
 
 //Serial (from SerialCallResponse)
 Serial myPort;                       // The serial port
@@ -42,14 +67,20 @@ boolean firstContact = true;		 // Whether we've heard from the microcontroller
 String val;
 
 void setup() {
-  size(852, 480);
+  size(896, 504);
 
   //Setup for Timer
   savedTime = millis();
 
+  font = createFont("SAOUITT-Regular.ttf", 32);
+
   //Sound
   Sound s = new Sound(this);
   s.volume(0.2);
+  openingOST = new SoundFile(this, "openOST.mp3");
+  defeat = new SoundFile(this, "18 Sad.mp3");
+  victory = new SoundFile(this, "victory.mp3");
+  button = new SoundFile(this, "button_click.wav");
   vaultDialSounds = new ArrayList<SoundFile>();
   dialTick = new SoundFile(this, "dialTick.wav");
   dialClick = new SoundFile(this, "dialClick.wav");
@@ -58,8 +89,10 @@ void setup() {
   vaultDialSounds.add(dialClick);
   vaultDialSounds.add(dialClack);
 
-
+  //Images
   vaultDialImg = loadImage("vaultDial.png");
+  menuBackgrounds =  new ArrayList<PImage>();
+  loadMenuBackgrounds(7);
 
   //Serial
   String portName = Serial.list()[3];
@@ -72,8 +105,20 @@ void setup() {
 //=======================================================================================================================
 //Images and Sounds (Loading Functions)
 
-//Load Images
-void loadImages() {
+//Load Menu Backgrounds
+void loadMenuBackgrounds(int numImages) {
+  for (int i = 0; i < numImages; i++) {
+    String numBuffer;
+    if (i > 9) {
+      numBuffer = "";
+    } else if (i > 99) {
+      numBuffer = "";
+    } else {
+      numBuffer = "0";
+    }
+    PImage p = loadImage("menubackground" + numBuffer + String.valueOf(i) + ".jpg");
+    menuBackgrounds.add(p);
+  }
 }
 
 void muteSounds(ArrayList<SoundFile> sounds) {
@@ -84,8 +129,8 @@ void muteSounds(ArrayList<SoundFile> sounds) {
   }
 }
 
-void reduceTime() {
-  timeRemaining -= 100;
+void reduceTime(int timeReducer) {
+  timeRemaining -= timeReducer;
 }
 
 void displayTime() {
@@ -117,17 +162,10 @@ void displayTime() {
 //int num = 0;
 
 
-//Dial dial = new Dial(1, 99, screenWidth / 2, screenHeight / 2, 200, 200);
-VaultStage stage = new VaultStage();
+Game game = new Game();
+
 void draw() {
-
-  background(240);
-  //Timer
-  displayTime();
-
-  stage.display();
-  //dial.update(num);
-  //dial.display();
+  game.play();
 }
 
 //Serial Event
@@ -137,47 +175,52 @@ void serialEvent(Serial myPort) {
   //if you got any bytes other than the linefeed:
   myString = trim(myString);
   println(myString);
-  myPort.clear();
-  
+
+
   //split the string at the commas and convert the sections into integers:
   int sensors[] = int(split(myString, ','));
 
-  // if(game.gameState == "drill"){
-  // if (sensors.length > 1){
-  //   distance = sensors[0];
-  //   drillOn = sensors[1];
-  // }
-  // }
-  // else if(game.gameState == "keypad"){
-
-  // }
-
-  //else if(game.gameState == "vault"){
-  if (sensors.length > 1) {
-    potPosition = sensors[0];
-    buttonPressed = sensors[1];
-    stage.update(potPosition, buttonPressed);
-    //writing output
-    //output += gameStage;
-    
-    //can be used with beefier computers..? basically the program lights up the dials that have been completed on the breadboard
-    //if (stage.completedDials.size() > 0) {
-    //  int i = 0;
-    //  //add each finished dial to the 
-    //  for (; i < stage.completedDials.size() - 1; i++) {
-    //    output += ",";
-    //    output += stage.completedDials.get(i);
-    //  }
-    //  output += ",";
-    //  output += stage.completedDials.get(i);
-    //}
-    
-  }
+  ////if drill
+  //if (game.gameState == 2) {
+  //  if (sensors.length > 1) {
+  //    distance = sensors[0];
+  //    if (sensors[1] == 1) {
+  //      buttonPushed = true;
+  //    } else { 
+  //      buttonPushed = false;
+  //    }
+  //  }
   //}
+  //if keypad
+  if (game.gameState == 3) {
+    if (sensors.length > 1) {
+      keyPadInput = sensors;
+      game.practiceKeyPad.update(keyPadInput);
+    }
+  }
+  //if vault
+  else if (game.gameState == 4) {
+    if (sensors.length > 1) {
+      potPosition = sensors[0];
+      buttonPressed = sensors[1];
+      game.practiceDial.update(potPosition);
+    }
+  }
+  
+  int output = game.gameState;
+  myPort.write(output);
+}
 
+void mouseReleased() {
+  mouseReleased = true;
+}
 
-  // send a byte to ask for more data:
-  myPort.write(3);
-  //gameState is saved as a string, not an integer?
-  //myPort.write(gameState);
+void keyReleased() {
+  //SPACE -- RESET GAME OR NEW STAGE
+  if (keyCode == 32) {
+    //Reset Game
+    if (game.gameState == 1 || game.gameState == 4 || game.gameState == 5) {
+      game = new Game();
+    }
+  }
 }
