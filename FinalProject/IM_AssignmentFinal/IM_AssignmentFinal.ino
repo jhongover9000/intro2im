@@ -1,10 +1,17 @@
-
-
-//IM Assignment 10: Flappy Bird Knockoff (Arduino Side)
-//By Joseph Hong
-//Description: A simple game where you press a button to make the bird fly a little bit. The goal is to get it in between the pipes
-//             and score as much as possible. If you hit a pipe, you lose. If you hit the ground you lose. The game gets progressively
-//             faster the more points you score. Try to get 50 to win. I've never won.
+//IM Assignment Final: Bank Heist
+//Joseph Hong
+//Description: This is a game that simulates a bank heist. There are two stages, one a keypad and
+//another a vault. I don't want to give hints, mostly because it's one of those things you need to
+//figure out and win on your own through experience, but here are the instructions anyway.
+//The keypad has 8 digits that you need to find by using the lights on the breadboard. The first light 
+//represents a row, the second a column. You need to complete the entire pattern (16 lights) before
+//you can enter the code.
+//The vault is made up of three dials, each of which alternate amongst each other. Only when it's
+//correct can you match the right number. Failing to do so will decrease the amount of time you have
+//left. I recommend using headphones for the stage, as there is audio panning to help you know which
+//dial is the one to use.
+//When the timer runs out, you lose. If you're on the hardest difficulty, one mistake will end the game.
+//Good luck! Btw the theme is Money Heist.
 //====================================================================================================================================
 //====================================================================================================================================
 //Global Variables & Setup
@@ -31,7 +38,7 @@ int patternType;          //uses randomSeed() to designate a specific pattern
 int patternIncr = 2;      //increment by 2 each phase
 int patternLength = 2;    //current pattern length
 int pattern[16];          //stores the current pattern for the phase
-int passcodeLength = 6;  //passcode length (actual length of digits in passcode is passcodeLength/2)
+int passcodeLength = 8;  //passcode length (actual length of digits in passcode is passcodeLength/2)
 int passcode[16];         //stores entire pattern, to be sent to Processing
 
 int phaseCounter = 0;     //number of phases completed
@@ -136,45 +143,9 @@ float getDistance()
 void loop() {
   // if we get a valid byte, read analog ins:
   if (Serial.available() > 0) {
-//    char readData[10] = "0000000000";
     // get incoming byte:
     inByte = Serial.read();
-//    Serial.print("I received: ");
-//    Serial.println(inByte,DEC);
 
-//    //change the received information into a string
-//    String input = "";
-//    int index = 0;
-//    while (readData[index] != '0') {
-//      input += readData[index];
-//      index++;
-//    }
-    //Serial.println(input);
-
-    //This was a fun little bit I was going to add to make things more complicated but my computer can't handle making all the inputs
-    //so I had to can this part of multiple outputs from Processing into Arduino.
-    //    //Comma Splitter (extracted and modified from github repo mattfelsen)
-    //    String inputs[4];
-    //    int counter = 0;
-    //    int lastIndex = 0;
-    //
-    //    //Iterate through the string and split each comma, placing values in array
-    //    for (int i = 0; i < input.length(); i++) {
-    //      //Loop through each character and check if it's a comma
-    //      if (input.substring(i, i + 1) == ",") {
-    //        //Grab the piece from the last index up to the current position and store it
-    //        inputs[counter] = input.substring(lastIndex, i);
-    //        //Update the last position and add 1, so it starts from the next character
-    //        lastIndex = i + 1;
-    //        //Increase the position in the array that we store into
-    //        counter++;
-    //      }
-    //      //If we're at the end of the string (no more commas to stop us)
-    //      if (i == input.length() - 1) {
-    //        // Grab the last part of the string from the lastIndex to the end
-    //        inputs[counter] = input.substring(lastIndex, i);
-    //      }
-    //    }
 
     //if vault stage, send 2 values: the button that is pressed and the potentiometer value
     if (inByte == 1) {
@@ -186,19 +157,6 @@ void loop() {
       Serial.print(potPosition);
       Serial.print(",");
       Serial.println(buttonPressed);
-
-      //can be used with beefier computers..? idk. mine can't handle it. basically the program lights up the dials that have been
-      //completed on the breadboard
-      //      //check if there are dials that have been unlocked
-      //      int arrayLength = sizeof(inputs)/sizeof(inputs[0]);
-      //      //if more than 1 then that means there is another value (which comes from the vault stage class)
-      //      if(arrayLength > 1){
-      //        //for each dial, turn on corresponding light
-      //        for(int i = 1; i < arrayLength; i++){
-      //          String temp = inputs[i];
-      //          turnOnOne(atoi(temp.c_str()));
-      //        }
-      //      }
     }
 
     //if drilling stage, send 2 values: if button is pressed (1 or 0) and the distance (int)
