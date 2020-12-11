@@ -1,4 +1,4 @@
-### Final Project: Bank Heist
+## Final Project: Bank Heist
 
 #### The Idea and Result
 
@@ -47,6 +47,8 @@ And that's the game! You can reset the game by clicking the SPACE bar, which the
 Also, if you're wondering, when you lose the game it looks like this.
 
 ![](IM_AssignmentFinal_Screenshot14.png)
+
+To get a better grasp of the game, [here's](https://drive.google.com/file/d/12iUUBkXA2SrMG78O81LMNwvz7-xeCH5i/view?usp=sharing) a demo ~~of me basically cheating through the entire game~~.
 
 #### The Arduino & Schematic
 
