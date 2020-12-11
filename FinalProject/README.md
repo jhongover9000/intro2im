@@ -60,13 +60,13 @@ I'm saving my complaints and problems till later, so for now I'll just post a pi
 
 #### The Code
 
-Most of my code is in the journal, so I think I'll just show you some excerpts from it. If you want to read more (i.e. [me regretting my decision of trying something new for the final](journal.md#day-10), [being hated by Arduino and having it bail on me](journal.md#day-16), [my computer crashing mid-way and deleting everything](journal.md#day-13), etc.), you can always check take a look. In addition, here are some topics you can check out in the journal in terms of code:
+Most of my code is in the journal, so I think I'll just show you some excerpts from it. If you want to read more (i.e. [me regretting my decision of trying something new for the final](journal.md#day-10), [being hated by Arduino and having it bail on me](journal.md#day-16), [my computer crashing mid-way and deleting everything](journal.md#day-13), etc.), you can always take a look. In addition, here are some topics you can check out in the journal in terms of code:
 
-[Setting the combinations for the dials so that they can be done like actual combination locks (turning in one direction then the other).](journal.md#day-9)
+* [Setting the combinations for the dials so that they can be done like actual combination locks (turning in one direction then the other).](journal.md#day-9)
+* [Water cup coding (the ripple effect)](journal.md#day-8)
+* [Coding and debugging the Vault Stage (also the day my computer crashed)](journal.md#day-13)
 
-[Water cup coding (the ripple effect)](journal.md#day-8)
 
-[Coding and debugging the Vault Stage (also the day my computer crashed)](journal.md#day-13)
 
 #### Difficulties
 
