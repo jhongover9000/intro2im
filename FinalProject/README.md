@@ -66,17 +66,14 @@ I'm saving my complaints and problems till later, so for now I'll just post a pi
 
 ![](IM_AssignmentFinal_Schematic.jpg)
 
-### The Code
+### The Code: Difficulties, Solutions, and Other Cool Stuff
 
-Most of my code is in the journal, so I think I'll just show you some excerpts from it. If you want to read more (i.e. [me regretting my decision of trying something new for the final](journal.md#day-10), [being hated by Arduino and having it bail on me](journal.md#day-16), [my computer crashing mid-way and deleting everything](journal.md#day-13), etc.), you can always take a look. In addition, here are some topics you can check out in the journal in terms of code:
+Most of my code is in the journal. If you want to read it (i.e. [me regretting my decision of trying something new for the final](journal.md#day-10), [being hated by Arduino and having it bail on me](journal.md#day-16), [my computer crashing mid-way and deleting everything](journal.md#day-13), etc.), you can always take a look. In addition, here are some topics you can check out in the journal in terms of code:
 
 * [Setting the combinations for the dials so that they can be done like actual combination locks (turning in one direction then the other).](journal.md#day-9)
 * [Water cup coding (the ripple effect)](journal.md#day-8)
 * [Coding and debugging the Vault Stage (also the day my computer crashed)](journal.md#day-13)
 * [The KeyPad class and the numbering system (the conversion from coordinates to digits)](journal.md#day-13)
-
-
-### Difficulties, and Some Pretty Cool Ideas
 
 #### Problem: Three Dials, One Potentiometer
 
@@ -152,53 +149,141 @@ The ghost dial was a dial that the player could move around but wouldn't actuall
 
 Here, you can see that when the player selects a dial with the buttons, the dial's actual value doesn't change (lockDigitPast is not updated) and the dial is not activated until the player reaches the saved state of the dial (the last digit they were on when they changed). This ghost dial is invisible, in theory, until you have the display function:
 
-//Display
-  void display() {
-    rectMode(CENTER);
-    imageMode(CENTER);
-    stroke(0);
+    //Display
+      void display() {
+        rectMode(CENTER);
+        imageMode(CENTER);
+        stroke(0);
 
-    fill(150);
-    rect(locX, locY, imgWidth + 10, imgHeight + 30);
+        fill(150);
+        rect(locX, locY, imgWidth + 10, imgHeight + 30);
 
-    //triangle over dial
-    if (isUnlocked) {
-      fill(0, 255, 0);
-    } else {
-      fill(255, 0, 0);
-    }
-    triangle(locX, locY - imgHeight/2 - 3, locX + 10, locY - imgHeight/2 -10, locX - 10, locY - imgHeight/2 -10);
-    fill(0);
+        //triangle over dial
+        if (isUnlocked) {
+          fill(0, 255, 0);
+        } else {
+          fill(255, 0, 0);
+        }
+        triangle(locX, locY - imgHeight/2 - 3, locX + 10, locY - imgHeight/2 -10, locX - 10, locY - imgHeight/2 -10);
+        fill(0);
 
 
-    //display real dial (using lockDigitPast)
-    pushMatrix();
-    float rotationReal = map(lockDigitPast, 0, totalDigits, 360, 3.64);
-    translate(locX, locY);
-    //println(rotationReal);
-    rotate(radians(rotationReal));
-    image(vaultDialImg, 0, 0, imgWidth, imgHeight);
-    popMatrix();
-
-    if (isSelected) {
-      //if inactive (lockDigit != lockDigitPast)
-      if (!isActive) {
-        //display ghost dial (using lockDigit)
+        //display real dial (using lockDigitPast)
         pushMatrix();
-        float rotationGhost = map(lockDigit, 0, totalDigits, 360, 0);
+        float rotationReal = map(lockDigitPast, 0, totalDigits, 360, 3.64);
         translate(locX, locY);
-        rotate(radians(rotationGhost));
-        //lower opacity of image before displaying
-        tint(255, 120);
+        //println(rotationReal);
+        rotate(radians(rotationReal));
         image(vaultDialImg, 0, 0, imgWidth, imgHeight);
         popMatrix();
-        noTint();
-      }
 
-      //display water cup
-      waterCup.display();
-    }
-  }
+        if (isSelected) {
+          //if inactive (lockDigit != lockDigitPast)
+          if (!isActive) {
+            //display ghost dial (using lockDigit)
+            pushMatrix();
+            float rotationGhost = map(lockDigit, 0, totalDigits, 360, 0);
+            translate(locX, locY);
+            rotate(radians(rotationGhost));
+            //lower opacity of image before displaying
+            tint(255, 120);
+            image(vaultDialImg, 0, 0, imgWidth, imgHeight);
+            popMatrix();
+            noTint();
+          }
+
+          //display water cup
+          waterCup.display();
+        }
+      }
 
 As you can see, the ghost dial follows the values of lockDigit–– that is, it follows the current value of the player's input through the potentiometer. The actual dial, on the other hand, follows the value of lockDigitPast, which is not updated until lockDigit == lockDigitPast. In this way, it allows the player to switch between dials without messing up any values on them. I don't know about you, but I thought that this was pretty cool.
 
+#### In-Between: AutoCracker, the code that kinda (sorta) works but is still cool regardless
+
+Something fun I made to test the validity of the locks was a special lil' thing called AutoCracker. It was basically a function made to crack the dials that I implemented. It worked on individual dials, where all you needed was to go back and forth along values, but it stopped working as efficiently once I implemented the ghost dial system and added two more dials to the mix. In any case, here it is:
+
+    //AutoCracker (tester)
+    void autoCrack() {
+      print(lockDigitPast + ":" +num);
+      println(num);
+
+      isSelected = true;
+
+      //while inactive, gets to the right number to activate lock
+      if (!isActive && lockDigit != lockDigitPast) {
+        if (lockDigit > lockDigitPast) {
+          num--;
+        } else if (lockDigit < lockDigitPast) {
+          num++;
+        }
+      }
+      //once active, solves for digit
+      else if (isActive && lock.iter < dialLength) {
+        if (lockDigit != lock.passcode.get(lock.iter)) {
+          if (lock.iter % 2 == 0) {
+            num++;
+          } else {
+            num--;
+          }
+        } else {
+          println("match : " + lockDigit + " iter : " + lock.iter);
+        }
+      }
+    }
+    
+Basically, there's a global variable called num that is initially set as 0, and the AutoCracker will begin the cracking as soon as it's called. It moves extremely quickly, finishing 10 digits in less than 10 seconds. It's really fun to watch it go, too.
+
+#### Another Cool Idea: The Keypad, from Coordinates to Digits
+
+Something that I came up with maybe halfway through the project was the idea of using the light game project I made a while back to create a system that could create a passcode you needed to enter. This was the Matrix System. It's also in the journal with a bit more commentary, but here it is now (once again, just a part of it):
+
+        (constructor)
+        .
+        .
+        .
+        //make the matrix of 1-9 (3x3)
+        int num = 1;
+        for (int i = 0; i < 3; i++) {
+          ArrayList<Integer> temp = new ArrayList<Integer>();
+          numMatrix.add(temp);
+          for (int j = 0; j < 3; j ++) {
+            numMatrix.get(i).add(num);
+            num++;
+          }
+        }
+      }
+
+      //Get passcoords with Serial Input
+      void getPassCoords(int[] inputs) {
+        //println("clearing");
+        passcodeCoords.clear();
+        //populates the passcodecoords array with input from Serial
+        for (int i : inputs) {
+          passcodeCoords.add(i);
+        }
+      }
+
+      void createPasscode() {
+        //creates passcode using the pairs of numbers (increments by 2)
+        int j = 0;
+        int i = 0;
+        while (i <= 15) {
+          int row = passcodeCoords.get(i);
+          i++;
+          int col = passcodeCoords.get(i);
+          i++;
+          int digit = numMatrix.get(row).get(col);
+          lock.passcode.set(j, digit);
+          j++;
+          if (j == passcodeLen) {
+            break;
+          }
+        }
+      }
+      
+This code works hand in hand with the Arduino, which uses the random() function to populate an array of size 16 (I made it 18 just in case of an overflow; kinda very paranoid about array stuff because of null exception trauma) then send those values over to Processing, which converts it into digits by using 2D arrays. Cool stuff, but it's not as ingenius as the ghost dial system (I am never going to let that one go).
+
+#### The Problem Never Solved: Arduino Hates Me.
+
+This one problem, pretty major I guess, is what kept me from expanding the project further than the size that I made it. Initially, I was going to allow the player to practice on a dial and a keypad before they chose to depart on the actual heist in the instructions page. However, this is where Arduino stepped in and kicked me in the stomach (or.. did I?). Basically, it stopped responding. Like the loop stopped. It stopped updating, it stopped taking my .writes(), the TX and RX lights turned off and Arduino Uno became a bunch of wires that were unresponsive. I never got that fixed completely. Sometimes it works, other times it doesn't. The moment I try to add more stages and more if statements in Arduino, it kind of bails on me. It's really weird, but I'm thankful that it at least lets me do these two stages. It's really weird because they all work great individually, but when they're put together they break down and die. I dunno. In any case, this is one of the main reasons why I decided not to pursue any more stages; I didn't really have the time, so why try to make more stages when I wasn't sure if Arduino was going to let me? Regardless, the game turned out okay, so I'm not angry. Just kinda disappointed.
