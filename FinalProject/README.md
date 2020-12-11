@@ -74,6 +74,7 @@ Most of my code is in the journal. If you want to read it (i.e. [me regretting m
 * [Water cup coding (the ripple effect)](journal.md#day-8)
 * [Coding and debugging the Vault Stage (also the day my computer crashed)](journal.md#day-13)
 * [The KeyPad class and the numbering system (the conversion from coordinates to digits)](journal.md#day-13)
+* [Trying, and giving up on getting Arduino to receive String inputs without lagging](journal.md#day-15)
 
 #### Problem: Three Dials, One Potentiometer
 
@@ -284,6 +285,64 @@ Something that I came up with maybe halfway through the project was the idea of 
       
 This code works hand in hand with the Arduino, which uses the random() function to populate an array of size 16 (I made it 18 just in case of an overflow; kinda very paranoid about array stuff because of null exception trauma) then send those values over to Processing, which converts it into digits by using 2D arrays. Cool stuff, but it's not as ingenius as the ghost dial system (I am never going to let that one go).
 
+#### While We're Talking About Cool Things, Audio Panning
+
+Had this idea from the start. Make the player only have *one* water cup so they can't work on all the dials at once. It was something that was supposed to be really fun (and it was), but coding it was a sucky time for me (as you've probably heard me say over and over). Regardless, this idea of using audio panning was something that came up while I was trying to come up with an idea of how to get the player to know which dial to use. This is the code that I used to make this audio panning work:
+
+      //Dial Assign (Program)
+      void dialAssign() {
+        unassignAll();
+        int choice = 0;
+        //select a random dial as long as it is not unlocked and there are locked dials remaining
+        choice = (int)random(0, 3);
+        if (checkCompleteAll()) {
+          //play sound of unlock complete
+          muteSounds(vaultDialSounds);
+          dialClack.play();
+          dialClack.amp(1);
+          dialClack.pan(0);
+          //set as stage complete
+          isComplete = true;
+        } else {
+          while (dials.get(choice).isUnlocked == true) {
+            choice = (int)random(0, 3);
+          }
+          assignedDial = choice;
+
+          //assign dial
+          dials.get(assignedDial).isAssigned = true;
+
+          //make sound; pan according to which dial it is
+          if (dialTick.isPlaying()) {
+            dialTick.stop();
+          }
+          dialClick.play();
+          dialClick.amp(1);
+          dialClick.pan(assignedDial-1.0);
+        }
+      }
+
+As you can see, at the end, the newly assigned dial's number is used in order to get the pan() to work. I thought it was pretty smart of me to do that, instead of having to make a bunch of if statements. In any case, that's how it works. I had a *lot* of work getting to this point, which you can read more about [here](journal.md#day-14).
+
 #### The Problem Never Solved: Arduino Hates Me.
 
 This one problem, pretty major I guess, is what kept me from expanding the project further than the size that I made it. Initially, I was going to allow the player to practice on a dial and a keypad before they chose to depart on the actual heist in the instructions page. However, this is where Arduino stepped in and kicked me in the stomach (or.. did I?). Basically, it stopped responding. Like the loop stopped. It stopped updating, it stopped taking my .writes(), the TX and RX lights turned off and Arduino Uno became a bunch of wires that were unresponsive. I never got that fixed completely. Sometimes it works, other times it doesn't. The moment I try to add more stages and more if statements in Arduino, it kind of bails on me. It's really weird, but I'm thankful that it at least lets me do these two stages. It's really weird because they all work great individually, but when they're put together they break down and die. I dunno. In any case, this is one of the main reasons why I decided not to pursue any more stages; I didn't really have the time, so why try to make more stages when I wasn't sure if Arduino was going to let me? Regardless, the game turned out okay, so I'm not angry. Just kinda disappointed.
+
+### A Moment to Remember the Loss of Ideas that Never Came to Be...
+
+I'd like to acknowledge all of the ideas that never were implemented, all of the ones that got away.
+
+* The VN-style story, with all the characters and dialogue. I'm sorry I didn't have the time to write a script, and I'm sorry for leaving all of you assets in the deepest, darkest part of my project folder.
+* The drill stage. You were supposed to be the first stage of the game. You really were. That's where all the wires from the keypad stage come from. The player drills those holes and puts the wires there. I'm sorry I didn't get to you; debugging took a lot of time and I just couldn't put you in the game.
+* The interactive instructions. Things weren't as easy as midterm because Arduino was involved this time. I'm sorry. You guys work fine on your own, but when Arduino comes in it screws you over and bails on you. I had to have you sit out of this one. Maybe next time?
+* The final stage of the game, the money-grab stage. This was what was supposed to decide the score of the game; various stacks on money in the vault, each one with a certain amount of alloted points and time to retrieve. Alas, I a) did not have the assets and had no time to make them from scratch and b) realized that it would take a *lot* of coding to bring you all into existence. I'm sorry. I just didn't have the time or the skills. You will be missed.
+
+And to the others, that appeared for the briefest moment in the corner of my mind before slipping away, I also apologize. I just didn't have the time. I had three presentations and two papers due, as well as an exam. Things got tough and I spent three days and nights up working on everything–– but I couldn't make you a reality. You will be missed. Sort of.
+
+### All Good Things Come to an End...
+
+So, concluding remarks. I got the assets (dial image and sounds) from the internet (googled it, first link that popped up; you get the picture). The game theme was Money Heist, a Netflix show that's based around bank heists. It's pretty good.
+
+And that's about it. Thanks for a great semester. Hope to see you again. Cheers.
+
+––Joseph, at the end of 2020
