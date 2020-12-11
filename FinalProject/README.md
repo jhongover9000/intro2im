@@ -6,7 +6,7 @@ So, how did this idea spring up in my head? Well, I'm not really sure, either. I
 
 Well, that's when I remembered being bummed that the potentiometer only turned like 270 degrees or something rather than turning all 360. I thought that it'd have been cool to make it into a dial of some kind, then *boom*. I thought I could make a vault dial with the thing. One thing led to another and I came up with the idea of a game simulating a bank heist, whose final stage (or second to last) would be opening a vault.
 
-So, the game. It's a bank heist simulation that consists of two stages (look at the journal to see how many I wanted to make vs the actual number I made because of my lack of experience with Arduino and debugging), a keypad (presumably for a door) and a vault dial. There's a timer going on in the background, and when it reaches 0 you lose. Also, if you mess up while working, you will either lose time or lose the game (depends on difficulty, read on).
+So, the game. It's a bank heist simulation that consists of two stages (look at the journal to see how many I wanted to make vs the actual number I made because of my lack of experience with Arduino and debugging), a keypad (presumably for a door) and a vault dial. There's a timer going on in the background, and when it reaches 0 you lose. Also, if you mess up while working, you will either lose time or lose the game (depends on difficulty, read on). If you don't want to read through the entire rundown, then [here's](https://drive.google.com/file/d/12iUUBkXA2SrMG78O81LMNwvz7-xeCH5i/view?usp=sharing) a video of me ~~cheating through~~ playing the game.
 
 I can't say that I'm overjoyed with how things turned out, seeing as I wasn't able to add all the stages I wanted to, but it's still fun to play. Here are screeshots of the game's menu screen:
 
@@ -48,7 +48,7 @@ Also, if you're wondering, when you lose the game it looks like this.
 
 ![](IM_AssignmentFinal_Screenshot14.png)
 
-To get a better grasp of the game, [here's](https://drive.google.com/file/d/12iUUBkXA2SrMG78O81LMNwvz7-xeCH5i/view?usp=sharing) a demo ~~of me basically cheating through the entire game~~.
+To get a better grasp of the game, [here's](https://drive.google.com/file/d/12iUUBkXA2SrMG78O81LMNwvz7-xeCH5i/view?usp=sharing) a demo ~~of me cheating through the entire game~~.
 
 #### The Arduino & Schematic
 
