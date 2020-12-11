@@ -1,12 +1,14 @@
 ## Final Project: Bank Heist
 
-#### The Idea and Result
+### The Idea and Result
 
 So, how did this idea spring up in my head? Well, I'm not really sure, either. Initially, I was planning on doing something similar to the Tap Tap series (basically games that you had to tap the right beats to a song) using either the buttons or photoresistors, which is something entirely different from this. But I guess what stopped me from doing it was because it was something that had already been done and I knew how to implement it. I dunno why I do this to myself, but I wanted to try something that hadn't been done (or at least to my knowledge). So I fiddled around with the sensors, thinking about what they could do and how I could make it into a game or a contraption of some sort. I knew that making something like an RC car was a possibility, but I never really explored it because I didn't want to burn down *all* the bridges behind me, ya know?
 
 Well, that's when I remembered being bummed that the potentiometer only turned like 270 degrees or something rather than turning all 360. I thought that it'd have been cool to make it into a dial of some kind, then *boom*. I thought I could make a vault dial with the thing. One thing led to another and I came up with the idea of a game simulating a bank heist, whose final stage (or second to last) would be opening a vault.
 
 So, the game. It's a bank heist simulation that consists of two stages (look at the journal to see how many I wanted to make vs the actual number I made because of my lack of experience with Arduino and debugging), a keypad (presumably for a door) and a vault dial. There's a timer going on in the background, and when it reaches 0 you lose. Also, if you mess up while working, you will either lose time or lose the game (depends on difficulty, read on). If you don't want to read through the entire rundown, then [here's](https://drive.google.com/file/d/12iUUBkXA2SrMG78O81LMNwvz7-xeCH5i/view?usp=sharing) a video of me ~~cheating through~~ playing the game.
+
+#### The Menu
 
 I can't say that I'm overjoyed with how things turned out, seeing as I wasn't able to add all the stages I wanted to, but it's still fun to play. Here are screeshots of the game's menu screen:
 
@@ -22,6 +24,8 @@ As you can see, the UI for the menu is pretty similar to that of my midterm proj
 
 This is what you get when you hit "Depart": the difficulty selection screen. I was planning on having animations on it, just like my midterm project, but I didn't have the time so I just made it differentiated by colors. Anyway, three difficulties, each has different penalties for mistakes. The easiest stage (Shoplifter) gives you the most time and the least penalties, the normal stage (Bank Robber) a little less time and a little more penalties, and the extreme stage (Phantom Thief) the least time and harshest penalty (you lose automatically if you make a single mistake). So, pick and choose your stage, then we move onto the first stage: the keypad.
 
+#### The Keypad
+
 ![](IM_AssignmentFinal_Screenshot06.png)
 ![](IM_AssignmentFinal_Screenshot07.png)
 
@@ -31,6 +35,8 @@ So, the stage is comprised of two parts, the Processing end and the Arduino end.
 
 Then you move on to the second (and last) stage, the vault, which uses the buttons and the potentiometer.
 
+#### The Vault
+
 ![](IM_AssignmentFinal_Screenshot09.png)
 ![](IM_AssignmentFinal_Screenshot10.png)
 
@@ -39,6 +45,8 @@ The vault is what took the most time to code as it required a lot of moving part
 ![](IM_AssignmentFinal_Screenshot11.png)
 
 When you change dials, your last position will be saved until you get back to it. In order to start a dial, you need to match the potentiometer to the last position that the dial was in (you'll know because of the ghost dial, which keeps track of your current position) before it starts moving along with your input. Anyway, whenever you complete a dial, the red arrow at the top of the dial will turn green (this will take some time, as there are 10 digits to a dial–– making 30 digits total for the vault stage passcode). Complete all the dials, and you'll know. There's a satisfying clack.
+
+#### The End
 
 ![](IM_AssignmentFinal_Screenshot13.png)
 
@@ -50,7 +58,7 @@ Also, if you're wondering, when you lose the game it looks like this.
 
 To get a better grasp of the game, [here's](https://drive.google.com/file/d/12iUUBkXA2SrMG78O81LMNwvz7-xeCH5i/view?usp=sharing) a demo ~~of me cheating through the entire game~~.
 
-#### The Arduino & Schematic
+### The Arduino & Schematic
 
 I'm saving my complaints and problems till later, so for now I'll just post a picture of my circuit and a schematic. Very simple; just three buttons, three LEDs, and a potentiometer. Here they are:
 
@@ -58,18 +66,139 @@ I'm saving my complaints and problems till later, so for now I'll just post a pi
 
 ![](IM_AssignmentFinal_Schematic.jpg)
 
-#### The Code
+### The Code
 
 Most of my code is in the journal, so I think I'll just show you some excerpts from it. If you want to read more (i.e. [me regretting my decision of trying something new for the final](journal.md#day-10), [being hated by Arduino and having it bail on me](journal.md#day-16), [my computer crashing mid-way and deleting everything](journal.md#day-13), etc.), you can always take a look. In addition, here are some topics you can check out in the journal in terms of code:
 
 * [Setting the combinations for the dials so that they can be done like actual combination locks (turning in one direction then the other).](journal.md#day-9)
 * [Water cup coding (the ripple effect)](journal.md#day-8)
 * [Coding and debugging the Vault Stage (also the day my computer crashed)](journal.md#day-13)
+* [The KeyPad class and the numbering system (the conversion from coordinates to digits)](journal.md#day-13)
 
 
+### Difficulties, and Some Pretty Cool Ideas
 
-#### Difficulties
+#### Problem: Three Dials, One Potentiometer
+
+One of the biggest coding difficulties that I came across in my amazing idea to have three dials was the simple question, *how?* I had three buttons, so switching between locks was going to be quite simple; I just needed to assign a value to each one. However, the hard part was the computation of the dial values –– I had only *one* potentiometer.
+
+You see, it's not quite as simple as you might think. Let's say you have dial A whose first value is 94. Dial B, which is up next, has a value of 32. So. Let's say you turn the first dial to 94. What now? If you switch dials from A to B, suddenly dial B is going to be registering a value of 94. We can't have that, especially when there are penalties for overturning the dial. So, in the face of this, I looked through several options.
+
+The first was just making it so that the player needed to go through each dial fully, that is complete the entire lock before moving onto the next one. Not as fun, doesn't use the audio panning as I wanted to, but it was something that I had to compromise given the fact I only had one potentiometer. I *did* consider asking for more, but I liked a challenge. I thought maybe, just *maybe*, I could get it to work. Then I came across the idea of having multiple wires for the analog input.
+
+This was kind of like an "aha" moment for me (this was me working early into the morning, so I was kinda loopy). With this, I could assign one analog slot for one dial. I was so sure it would work. What I *didn't* register, like an idiot (in my defense I was more or less insane at that time), was that just because I had different wires didn't mean that all of a sudden the values were going to be saved. And *that's* when I came across the idea that I implemented: the solution that I came to call the "ghost dial".
+
+#### Solution: The Ghost Dial System
+
+The ghost dial was a dial that the player could move around but wouldn't actually do anything in the game. This was meant to show the player at what position their dial currently was without actually affecting the dials in the process. In order to move the dial that they were on, the player needed to match the ghost dial with the real one. After that, they would be able to move it with the potentiometer (the real dial). I'm not really sure where I got this idea from. I know that it had to do with me thinking of saved states in games, but I feel like there was something other than that which gave me this idea... In any case, this system was implemented using a set of boolean values for selection by the player and activation of the dial. Here's the code for the update (shortened to only include things related to the ghost dial system), which dictates half of the system:
+
+    //Update
+    void update(int potPosition) {
+    
+    .
+    .
+    .
+      if (!isSelected) {
+        isActive = false;
+      }
+      //while locked, player can move dial
+      if (!isUnlocked) {
+        //if dial has been selected (when you press a different button it deselects)
+        if (isSelected) {
+          //if the lock is not active (player is returning to lock), cannot proceed with updates until
+          //potPosPast is the same as what the current pot value is (until player matches ghost dial with real dial)
+          //must be the correct lock in order to activate.
+          if (!isActive) {
+            if (lockDigit == lockDigitPast) {
+              isActive = true;
+            }
+          }
+          //if lock is active, then values begin to update (with the real dial moving)
+          else {
+
+            //for the case that a spike value appears (more than +-5 the past value), the value is ignored.
+            //if lock is fresh, must start at 0. otherwise, the value must be within range of error (+-5)
+            //this doubles as a restrictor that keeps the player from turning the dial too quickly and makes the stage
+            //take longer to complete.
+            if ((potPosPast - 10 <= potPosition && potPosition <= potPosPast + 10)) {
+            
+            .
+            .
+            .
+            
+              //if the lock digit is assigned and correct, then the lock will move on to the next digit.
+              (else) if (isAssigned && lock.checkInput(lockDigit)) {
+                if	(isAssigned && !lock.checkLock()) {
+                  lock.iter++;
+                }
+                isMatched = true;
+                //water ripples
+                waterCup.isRippling = true;
+                //upon matching the digit, the dial checks if the entire passcode has been matched
+                if (lock.checkLock()) {
+                  isUnlocked = true;
+                }
+              }
+              //update value of last digit and potPosPast
+              lockDigitPast = lockDigit;
+              potPosPast = potPosition;
+            } else {
+              isActive = false;
+            }
+          }
+        }
+      }
+    }
+
+Here, you can see that when the player selects a dial with the buttons, the dial's actual value doesn't change (lockDigitPast is not updated) and the dial is not activated until the player reaches the saved state of the dial (the last digit they were on when they changed). This ghost dial is invisible, in theory, until you have the display function:
+
+//Display
+  void display() {
+    rectMode(CENTER);
+    imageMode(CENTER);
+    stroke(0);
+
+    fill(150);
+    rect(locX, locY, imgWidth + 10, imgHeight + 30);
+
+    //triangle over dial
+    if (isUnlocked) {
+      fill(0, 255, 0);
+    } else {
+      fill(255, 0, 0);
+    }
+    triangle(locX, locY - imgHeight/2 - 3, locX + 10, locY - imgHeight/2 -10, locX - 10, locY - imgHeight/2 -10);
+    fill(0);
 
 
+    //display real dial (using lockDigitPast)
+    pushMatrix();
+    float rotationReal = map(lockDigitPast, 0, totalDigits, 360, 3.64);
+    translate(locX, locY);
+    //println(rotationReal);
+    rotate(radians(rotationReal));
+    image(vaultDialImg, 0, 0, imgWidth, imgHeight);
+    popMatrix();
 
-#### Some Pretty-Cool-Ideas-That-Actually-Made-It-Into-The-Game
+    if (isSelected) {
+      //if inactive (lockDigit != lockDigitPast)
+      if (!isActive) {
+        //display ghost dial (using lockDigit)
+        pushMatrix();
+        float rotationGhost = map(lockDigit, 0, totalDigits, 360, 0);
+        translate(locX, locY);
+        rotate(radians(rotationGhost));
+        //lower opacity of image before displaying
+        tint(255, 120);
+        image(vaultDialImg, 0, 0, imgWidth, imgHeight);
+        popMatrix();
+        noTint();
+      }
+
+      //display water cup
+      waterCup.display();
+    }
+  }
+
+As you can see, the ghost dial follows the values of lockDigit–– that is, it follows the current value of the player's input through the potentiometer. The actual dial, on the other hand, follows the value of lockDigitPast, which is not updated until lockDigit == lockDigitPast. In this way, it allows the player to switch between dials without messing up any values on them. I don't know about you, but I thought that this was pretty cool.
+
